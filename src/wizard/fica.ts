@@ -2,6 +2,7 @@
 import { t } from '../i18n';
 import { FICA_TOTAL_RATE, FICA_EXEMPT_VISA_TYPES, STUDENT_EXEMPT_YEARS, calculateFICA } from '../data/constants';
 import { initIcons } from '../utils/icons';
+import { wizardShell as sharedShell } from './shared';
 import type { WizardContext } from '../app';
 
 type SubStep = 'employed' | 'paystub' | 'result';
@@ -27,20 +28,7 @@ function goSub(ctx: WizardContext, step: SubStep): void {
 }
 
 function shell(ctx: WizardContext, step: number, total: number, content: string): string {
-  return `
-    <div class="max-w-[640px] mx-auto px-4 sm:px-0 py-12">
-      <div class="wizard-panel bg-surface rounded-sharp shadow-wizard p-6 sm:p-8">
-        ${ctx.renderProgressBar(step, total)}
-        <div class="flex items-center gap-2 mb-1">
-          <i data-lucide="wallet" class="w-5 h-5 text-primary"></i>
-          <span class="text-caption text-primary font-semibold">${t('nav.fica')}</span>
-        </div>
-        <div class="wizard-step-enter">
-          ${content}
-        </div>
-      </div>
-    </div>
-  `;
+  return sharedShell(ctx, step, total, 'wallet', 'nav.fica', content);
 }
 
 function renderEmployedStep(ctx: WizardContext): void {

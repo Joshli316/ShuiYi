@@ -3,6 +3,7 @@ import { t, getLang } from '../i18n';
 import { calculateTax, STANDARD_DEDUCTION_RA } from '../data/constants';
 import { ALL_COUNTRIES, TREATY_DATA, getTreatyInfo, calculateTreatySavings, TERMINATED_TREATIES } from '../data/treaties';
 import { initIcons } from '../utils/icons';
+import { wizardShell as sharedShell, showValidationError, clearValidationError } from './shared';
 import type { WizardContext } from '../app';
 
 type SubStep = 'country' | 'income' | 'result';
@@ -28,20 +29,7 @@ function goSub(ctx: WizardContext, step: SubStep): void {
 }
 
 function shell(ctx: WizardContext, step: number, total: number, content: string): string {
-  return `
-    <div class="max-w-[640px] mx-auto px-4 sm:px-0 py-12">
-      <div class="wizard-panel bg-surface rounded-sharp shadow-wizard p-6 sm:p-8">
-        ${ctx.renderProgressBar(step, total)}
-        <div class="flex items-center gap-2 mb-1">
-          <i data-lucide="calculator" class="w-5 h-5 text-primary"></i>
-          <span class="text-caption text-primary font-semibold">${t('nav.treaty')}</span>
-        </div>
-        <div class="wizard-step-enter">
-          ${content}
-        </div>
-      </div>
-    </div>
-  `;
+  return sharedShell(ctx, step, total, 'calculator', 'nav.treaty', content);
 }
 
 function renderCountryStep(ctx: WizardContext): void {
@@ -97,8 +85,8 @@ function renderIncomeStep(ctx: WizardContext): void {
   container.querySelector('#btn-next')?.addEventListener('click', () => {
     const incomeInput = container.querySelector('#treaty-income') as HTMLInputElement;
     const income = parseFloat(incomeInput.value);
-    if (isNaN(income) || income < 0) { incomeInput.classList.add('input-error', 'shake'); incomeInput.focus(); setTimeout(() => incomeInput.classList.remove('shake'), 300); return; }
-    incomeInput.classList.remove('input-error');
+    if (isNaN(income) || income < 0) { showValidationError(incomeInput); return; }
+    clearValidationError(incomeInput);
     ctx.updateState({ incomeAmount: income });
     goSub(ctx, 'result');
   });

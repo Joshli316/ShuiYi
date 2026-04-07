@@ -3,6 +3,7 @@ import { t, getLang } from '../i18n';
 import { calculateSPT } from '../utils/spt';
 import { TAX_YEAR, STUDENT_EXEMPT_YEARS } from '../data/constants';
 import { initIcons } from '../utils/icons';
+import { showValidationError, clearValidationError } from './shared';
 import type { WizardContext } from '../app';
 
 type SubStep = 'visa' | 'j1type' | 'entry' | 'confirm' | 'priorj1' | 'income' | 'result';
@@ -15,7 +16,6 @@ export function renderStatusWizard(ctx: WizardContext): void {
 }
 
 function renderSubStep(ctx: WizardContext): void {
-  const { container, state, updateState } = ctx;
   const renderers: Record<SubStep, () => void> = {
     visa: () => renderVisaStep(ctx),
     j1type: () => renderJ1TypeStep(ctx),
@@ -33,9 +33,17 @@ function goSub(ctx: WizardContext, step: SubStep): void {
   renderSubStep(ctx);
 }
 
-function getStepNumber(): number {
-  const steps: SubStep[] = ['visa', 'entry', 'confirm', 'priorj1', 'income'];
-  return steps.indexOf(currentSubStep) + 1;
+/** Run SPT calculation from current state and save results. j1IsStudent defaults to true when unset. */
+function computeAndSaveSPT(ctx: WizardContext): ReturnType<typeof calculateSPT> {
+  const s = ctx.state;
+  const result = calculateSPT(s.visaType || 'F-1', s.entryYear || TAX_YEAR, s.hadPriorJ1 || false, s.j1IsStudent !== false);
+  ctx.updateState({
+    taxStatus: result.status,
+    exemptYearsUsed: result.exemptYearsUsed,
+    exemptYearsRemaining: result.exemptYearsRemaining,
+    transitionYear: result.transitionYear,
+  });
+  return result;
 }
 
 function wizardShell(ctx: WizardContext, step: number, total: number, content?: string, subtitle?: string): string {
@@ -182,9 +190,9 @@ function renderEntryStep(ctx: WizardContext): void {
     const yearSelect = container.querySelector('#entry-year') as HTMLSelectElement;
     const month = parseInt(monthSelect.value);
     const year = parseInt(yearSelect.value);
-    if (!month) { monthSelect.classList.add('input-error', 'shake'); monthSelect.focus(); setTimeout(() => monthSelect.classList.remove('shake'), 300); return; }
-    if (!year) { yearSelect.classList.add('input-error', 'shake'); yearSelect.focus(); setTimeout(() => yearSelect.classList.remove('shake'), 300); return; }
-    monthSelect.classList.remove('input-error'); yearSelect.classList.remove('input-error');
+    if (!month) { showValidationError(monthSelect); return; }
+    if (!year) { showValidationError(yearSelect); return; }
+    clearValidationError(monthSelect); clearValidationError(yearSelect);
     const calendarYears = currentYear - year + 1;
     ctx.updateState({ entryMonth: month, entryYear: year, calendarYears });
     goSub(ctx, 'confirm');
@@ -256,15 +264,7 @@ function renderPriorJ1Step(ctx: WizardContext): void {
     card.addEventListener('click', () => {
       const opt = (card as HTMLElement).dataset.option;
       ctx.updateState({ hadPriorJ1: opt === 'yes' });
-      // Calculate SPT now
-      const s = ctx.updateState({});
-      const result = calculateSPT(s.visaType || 'F-1', s.entryYear || TAX_YEAR, s.hadPriorJ1 || false, s.j1IsStudent !== false);
-      ctx.updateState({
-        taxStatus: result.status,
-        exemptYearsUsed: result.exemptYearsUsed,
-        exemptYearsRemaining: result.exemptYearsRemaining,
-        transitionYear: result.transitionYear,
-      });
+      const result = computeAndSaveSPT(ctx);
       if (result.status === 'NRA') {
         goSub(ctx, 'income');
       } else {
@@ -282,13 +282,7 @@ function renderIncomeStep(ctx: WizardContext): void {
 
   // Ensure SPT is calculated
   if (!state.taxStatus) {
-    const result = calculateSPT(state.visaType || 'F-1', state.entryYear || TAX_YEAR, state.hadPriorJ1 || false, state.j1IsStudent !== false);
-    ctx.updateState({
-      taxStatus: result.status,
-      exemptYearsUsed: result.exemptYearsUsed,
-      exemptYearsRemaining: result.exemptYearsRemaining,
-      transitionYear: result.transitionYear,
-    });
+    computeAndSaveSPT(ctx);
   }
 
   const content = `
@@ -328,7 +322,7 @@ function renderResultStep(ctx: WizardContext): void {
   const lang = getLang();
   const isNRA = state.taxStatus === 'NRA';
 
-  const result = calculateSPT(state.visaType || 'F-1', state.entryYear || TAX_YEAR, state.hadPriorJ1 || false, state.j1IsStudent !== false);
+  const result = computeAndSaveSPT(ctx);
 
   const statusTitle = isNRA ? t('status.resultNRA') : t('status.resultRA');
   const statusMeaning = isNRA ? t('status.nraMeaning') : t('status.raMeaning');

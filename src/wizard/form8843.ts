@@ -5,6 +5,7 @@ import { ALL_COUNTRIES } from '../data/treaties';
 import { generateForm8843PDF } from '../utils/pdf';
 import { initIcons } from '../utils/icons';
 import { escAttr } from '../utils/sanitize';
+import { wizardShell, showValidationError, clearValidationError } from './shared';
 import type { WizardContext } from '../app';
 
 type SubStep = 'name' | 'citizenship' | 'school' | 'days' | 'compliant' | 'result';
@@ -34,20 +35,7 @@ function goSub(ctx: WizardContext, step: SubStep): void {
 }
 
 function shell(ctx: WizardContext, step: number, total: number, content: string): string {
-  return `
-    <div class="max-w-[640px] mx-auto px-4 sm:px-0 py-12">
-      <div class="wizard-panel bg-surface rounded-sharp shadow-wizard p-6 sm:p-8">
-        ${ctx.renderProgressBar(step, total)}
-        <div class="flex items-center gap-2 mb-1">
-          <i data-lucide="file-text" class="w-5 h-5 text-primary"></i>
-          <span class="text-caption text-primary font-semibold">${t('nav.form8843')}</span>
-        </div>
-        <div class="wizard-step-enter">
-          ${content}
-        </div>
-      </div>
-    </div>
-  `;
+  return wizardShell(ctx, step, total, 'file-text', 'nav.form8843', content);
 }
 
 function renderNameStep(ctx: WizardContext): void {
@@ -80,8 +68,8 @@ function renderNameStep(ctx: WizardContext): void {
     const name = nameInput.value.trim();
     const address = (container.querySelector('#f-address') as HTMLInputElement).value.trim();
     const ssn = (container.querySelector('#f-ssn') as HTMLInputElement).value.trim();
-    if (!name) { nameInput.classList.add('input-error', 'shake'); nameInput.focus(); setTimeout(() => nameInput.classList.remove('shake'), 300); return; }
-    nameInput.classList.remove('input-error');
+    if (!name) { showValidationError(nameInput); return; }
+    clearValidationError(nameInput);
     ctx.updateState({ fullName: name, usAddress: address, ssn: ssn || undefined });
     goSub(ctx, 'citizenship');
   });
@@ -119,8 +107,8 @@ function renderCitizenshipStep(ctx: WizardContext): void {
     const citizenSelect = container.querySelector('#f-citizen') as HTMLSelectElement;
     const citizen = citizenSelect.value;
     const taxRes = (container.querySelector('#f-taxres') as HTMLSelectElement).value;
-    if (!citizen) { citizenSelect.classList.add('input-error', 'shake'); citizenSelect.focus(); setTimeout(() => citizenSelect.classList.remove('shake'), 300); return; }
-    citizenSelect.classList.remove('input-error');
+    if (!citizen) { showValidationError(citizenSelect); return; }
+    clearValidationError(citizenSelect);
     ctx.updateState({ citizenship: citizen, taxResidence: taxRes || citizen });
     goSub(ctx, 'school');
   });
@@ -151,8 +139,8 @@ function renderSchoolStep(ctx: WizardContext): void {
     const schoolInput = container.querySelector('#f-school') as HTMLInputElement;
     const school = schoolInput.value.trim();
     const addr = (container.querySelector('#f-school-addr') as HTMLInputElement).value.trim();
-    if (!school) { schoolInput.classList.add('input-error', 'shake'); schoolInput.focus(); setTimeout(() => schoolInput.classList.remove('shake'), 300); return; }
-    schoolInput.classList.remove('input-error');
+    if (!school) { showValidationError(schoolInput); return; }
+    clearValidationError(schoolInput);
     ctx.updateState({ schoolName: school, schoolAddress: addr });
     goSub(ctx, 'days');
   });
@@ -185,8 +173,8 @@ function renderDaysStep(ctx: WizardContext): void {
   container.querySelector('#btn-next')?.addEventListener('click', () => {
     const daysInput = container.querySelector('#f-days') as HTMLInputElement;
     const d = parseInt(daysInput.value);
-    if (!d || d < 1 || d > 366) { daysInput.classList.add('input-error', 'shake'); daysInput.focus(); setTimeout(() => daysInput.classList.remove('shake'), 300); return; }
-    daysInput.classList.remove('input-error');
+    if (!d || d < 1 || d > 366) { showValidationError(daysInput); return; }
+    clearValidationError(daysInput);
     ctx.updateState({ daysPresent: d });
     goSub(ctx, 'compliant');
   });
