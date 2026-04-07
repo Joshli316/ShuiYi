@@ -84,7 +84,7 @@ const strings: Record<string, StringPair> = {
   'landing.value2Title': { en: 'Get your forms', zh: '获取你的税表' },
   'landing.value2Desc': { en: 'Get a pre-filled Form 8843 PDF. Print it, sign it, mail it.', zh: '获取预填好的8843表PDF。打印、签名、邮寄。' },
   'landing.value3Title': { en: 'Calculate treaty savings', zh: '计算条约节省' },
-  'landing.value3Desc': { en: 'Check if your country\'s tax treaty can save you money. Students from treaty countries save $500-$3,000 per year on average.', zh: '查看你的国家条约是否能帮你省钱。来自条约国家的学生平均每年可节省$500-$3,000。' },
+  'landing.value3Desc': { en: 'Check if your country\'s treaty can save you $500-$3,000 per year.', zh: '查看条约是否能帮你每年省$500-$3,000。' },
   'landing.socialProof': { en: 'Designed for the 1.2M international students in the US. Based on IRS publications and tax treaty data.', zh: '为120万在美国际学生设计。基于IRS出版物和税务条约数据。' },
   'landing.stats1': { en: '14 treaty countries covered', zh: '覆盖14个条约国家' },
   'landing.stats2': { en: '$0 cost', zh: '完全免费' },
