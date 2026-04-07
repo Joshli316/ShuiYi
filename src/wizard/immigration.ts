@@ -58,13 +58,13 @@ export function renderImmigration(ctx: WizardContext): void {
         <div class="space-y-3 mb-8" id="faq-list">
           ${faqs.map((faq, i) => `
             <div class="border-[1.5px] border-border rounded-soft overflow-hidden" data-faq="${i}">
-              <button class="faq-trigger w-full text-left p-4 flex items-center gap-3 hover:bg-[#F9FAFB] transition-colors" aria-expanded="false" aria-controls="faq-${i}">
+              <button id="faq-trigger-${i}" class="faq-trigger w-full text-left p-4 flex items-center gap-3 hover:bg-[#F9FAFB] transition-colors min-h-[48px]" aria-expanded="false" aria-controls="faq-${i}">
                 <i data-lucide="${faq.icon}" class="w-5 h-5 text-text-secondary flex-shrink-0"></i>
                 <span class="flex-1 text-body-sm font-semibold text-text">${t(faq.questionKey)}</span>
                 ${riskBadge(faq.risk)}
                 <i data-lucide="chevron-down" class="w-4 h-4 text-text-muted flex-shrink-0 transition-transform duration-200"></i>
               </button>
-              <div id="faq-${i}" class="accordion-content">
+              <div id="faq-${i}" class="accordion-content" role="region" aria-labelledby="faq-trigger-${i}">
                 <div class="px-4 pb-4 pt-1 ml-8 border-t border-border">
                   <p class="text-body text-text-secondary">${t(faq.answerKey)}</p>
                 </div>
@@ -78,6 +78,7 @@ export function renderImmigration(ctx: WizardContext): void {
           <h3 class="text-h3 text-text mb-4">${t('immigration.mythVsReality')}</h3>
           <div class="border-[1.5px] border-border rounded-soft overflow-hidden">
             <table class="w-full text-sm">
+              <caption class="sr-only">${t('immigration.mythVsReality')}</caption>
               <thead>
                 <tr class="bg-[#F9FAFB]">
                   <th class="text-left p-3 text-body-sm text-error font-semibold">${t('immigration.myth')}</th>

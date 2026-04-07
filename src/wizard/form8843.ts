@@ -183,8 +183,10 @@ function renderDaysStep(ctx: WizardContext): void {
   container.innerHTML = shell(ctx, 4, 5, content);
 
   container.querySelector('#btn-next')?.addEventListener('click', () => {
-    const d = parseInt((container.querySelector('#f-days') as HTMLInputElement).value);
-    if (!d || d < 1) return;
+    const daysInput = container.querySelector('#f-days') as HTMLInputElement;
+    const d = parseInt(daysInput.value);
+    if (!d || d < 1 || d > 366) { daysInput.classList.add('input-error', 'shake'); daysInput.focus(); setTimeout(() => daysInput.classList.remove('shake'), 300); return; }
+    daysInput.classList.remove('input-error');
     ctx.updateState({ daysPresent: d });
     goSub(ctx, 'compliant');
   });
@@ -285,12 +287,15 @@ function renderResultStep(ctx: WizardContext): void {
   container.querySelector('#btn-download')?.addEventListener('click', async () => {
     const btn = container.querySelector('#btn-download') as HTMLButtonElement;
     btn.disabled = true;
-    btn.innerHTML = '<span class="animate-pulse">Generating...</span>';
+    btn.innerHTML = `<span class="animate-pulse">${t('form8843.generating')}</span>`;
     try {
       await generateForm8843PDF(state);
+      btn.disabled = false;
+      btn.innerHTML = `<span class="flex items-center gap-2"><i data-lucide="check-circle" class="w-5 h-5"></i> ${t('form8843.downloaded')}</span>`;
+      initIcons();
     } catch (err) {
       console.error('PDF generation failed:', err);
-      btn.innerHTML = `<span class="text-error">Error — try again</span>`;
+      btn.innerHTML = `<span class="text-error">${t('form8843.pdfError')}</span>`;
       btn.disabled = false;
     }
   });

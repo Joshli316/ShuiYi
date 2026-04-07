@@ -15,6 +15,12 @@
   <meta property="og:image" content="https://shuiyi.pages.dev/assets/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ShuiYi 税易 — Tax Guide for International Students">
+  <meta name="twitter:description" content="Free bilingual tax guidance. Know your status. Get your forms. Save money.">
+  <meta name="twitter:image" content="https://shuiyi.pages.dev/assets/og-image.png">
+
   <link rel="canonical" href="https://shuiyi.pages.dev/">
 
   <!-- PWA -->
@@ -28,59 +34,35 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: { DEFAULT: '#2D9F6F', dark: '#1E7A52', light: '#E8F5EE' },
-            accent: { DEFAULT: '#F5A623', dark: '#D4891A' },
-            bg: '#FAFAF8',
-            surface: '#FFFFFF',
-            text: { DEFAULT: '#1A1A1A', secondary: '#4B5563', muted: '#9CA3AF' },
-            success: '#16A34A',
-            warning: '#D97706',
-            error: '#DC2626',
-            border: { DEFAULT: '#E5E7EB', focus: '#2D9F6F' },
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            chinese: ['"Noto Sans SC"', 'Inter', 'system-ui', 'sans-serif'],
-          },
-          spacing: {
-            '1': '4px', '2': '8px', '3': '12px', '4': '16px',
-            '6': '24px', '8': '32px', '12': '48px', '16': '64px', '24': '96px',
-          },
-          fontSize: {
-            'caption': ['0.875rem', { lineHeight: '1.5', letterSpacing: '0.01em' }],
-            'body-sm': ['1rem', { lineHeight: '1.5', fontWeight: '500' }],
-            'body': ['1.125rem', { lineHeight: '1.6' }],
-            'h3': ['1.25rem', { lineHeight: '1.4', fontWeight: '600' }],
-            'h2': ['1.5rem', { lineHeight: '1.3', fontWeight: '600' }],
-            'h1': ['2rem', { lineHeight: '1.2', fontWeight: '700', letterSpacing: '-0.01em' }],
-            'display': ['3rem', { lineHeight: '1.1', fontWeight: '800', letterSpacing: '-0.02em' }],
-            'btn': ['1rem', { lineHeight: '1', fontWeight: '600', letterSpacing: '0.02em' }],
-          },
-          borderRadius: {
-            'sharp': '8px',
-            'medium': '6px',
-            'soft': '12px',
-            'pill': '9999px',
-            'celebrate': '16px',
-          },
-          boxShadow: {
-            'wizard': '0 2px 8px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.08)',
-            'btn-hover': '0 2px 8px rgba(45,159,111,0.3)',
-          },
-        },
-      },
-    }
-  </script>
+  <!-- Tailwind CSS (build-time purged) -->
+  <link rel="stylesheet" href="/styles/tailwind.css">
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" integrity="sha384-ieG+IKD0d/ZPXyCBTMVAbqsQdns8QGJR/e26WMw7M4fkaI/rHcS/YIoi+ah9WGge" crossorigin="anonymous"></script>
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ShuiYi 税易",
+    "description": "Free bilingual tax guidance for international students in the US",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "inLanguage": ["en", "zh"]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Do F-1 students need to file US taxes?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every F-1 student must file Form 8843, even with zero income. If you earned money, you also file Form 1040-NR." } },
+      { "@type": "Question", "name": "What is Form 8843?", "acceptedAnswer": { "@type": "Answer", "text": "A one-page IRS form that tells the government you're an exempt individual (student/scholar). It keeps your days from counting toward the Substantial Presence Test." } },
+      { "@type": "Question", "name": "Can I get a FICA refund as an international student?", "acceptedAnswer": { "@type": "Answer", "text": "If your employer withheld Social Security and Medicare taxes during your first 5 years on an F-1, J-1, M-1, or Q-1 visa, you're owed that money back." } },
+      { "@type": "Question", "name": "What's the difference between NRA and RA?", "acceptedAnswer": { "@type": "Answer", "text": "Nonresident Aliens (NRA) only pay tax on US income and file 1040-NR. Resident Aliens (RA) pay tax on worldwide income and file 1040 like US citizens. Most students are NRA for their first 5 years." } },
+      { "@type": "Question", "name": "Does my country have a tax treaty with the US?", "acceptedAnswer": { "@type": "Answer", "text": "China, India, South Korea, Japan, and 10 other countries have student tax treaties. Chinese students can exempt $5,000/year." } }
+    ]
+  }
+  </script>
 
   <!-- Print CSS -->
   <link rel="stylesheet" href="/styles/print.css" media="print">
@@ -266,7 +248,7 @@
   </header>
 
   <!-- Main content -->
-  <main id="app" class="flex-1">
+  <main id="app" class="flex-1 scroll-mt-14" aria-live="polite">
     <!-- Content rendered by app.ts -->
   </main>
 

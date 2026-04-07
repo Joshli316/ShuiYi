@@ -5,7 +5,7 @@ import { TAX_YEAR, STUDENT_EXEMPT_YEARS } from '../data/constants';
 import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
 
-type SubStep = 'visa' | 'entry' | 'confirm' | 'priorj1' | 'income' | 'result';
+type SubStep = 'visa' | 'j1type' | 'entry' | 'confirm' | 'priorj1' | 'income' | 'result';
 
 let currentSubStep: SubStep = 'visa';
 
@@ -18,6 +18,7 @@ function renderSubStep(ctx: WizardContext): void {
   const { container, state, updateState } = ctx;
   const renderers: Record<SubStep, () => void> = {
     visa: () => renderVisaStep(ctx),
+    j1type: () => renderJ1TypeStep(ctx),
     entry: () => renderEntryStep(ctx),
     confirm: () => renderConfirmStep(ctx),
     priorj1: () => renderPriorJ1Step(ctx),
@@ -87,7 +88,7 @@ function renderVisaStep(ctx: WizardContext): void {
       renderVisaStep(ctx); // re-render with selection
     });
     card.addEventListener('keydown', (e) => {
-      if ((e as KeyboardEvent).key === 'Enter') (card as HTMLElement).click();
+      if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') { e.preventDefault(); (card as HTMLElement).click(); }
     });
   });
 
@@ -95,15 +96,47 @@ function renderVisaStep(ctx: WizardContext): void {
     const s = ctx.updateState({});
     if (!s.visaType) return;
     if (s.visaType === 'OTHER' || s.visaType === 'H-1B') {
-      // Non-exempt: skip to result
+      // Non-exempt: skip to result, H-1B always has income
       const result = calculateSPT(s.visaType, s.entryYear || TAX_YEAR, false);
-      ctx.updateState({ taxStatus: result.status, exemptYearsUsed: 0, exemptYearsRemaining: 0 });
+      ctx.updateState({ taxStatus: result.status, exemptYearsUsed: 0, exemptYearsRemaining: 0, hasIncome: s.visaType === 'H-1B' ? true : s.hasIncome });
       goSub(ctx, 'result');
+    } else if (s.visaType === 'J-1') {
+      goSub(ctx, 'j1type');
     } else {
       goSub(ctx, 'entry');
     }
   });
 
+  initIcons();
+}
+
+function renderJ1TypeStep(ctx: WizardContext): void {
+  const { container, state } = ctx;
+  const content = `
+    <h3 class="text-h3 text-text mb-1">${t('status.j1type')}</h3>
+    <p class="text-caption text-text-muted mb-4 flex items-center gap-1">
+      <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> ${t('status.j1typeHelp')}
+    </p>
+    <div class="space-y-3">
+      ${ctx.renderOptionCard('student', t('status.j1student'), state.j1IsStudent === true, 'graduation-cap')}
+      ${ctx.renderOptionCard('researcher', t('status.j1researcher'), state.j1IsStudent === false, 'briefcase')}
+    </div>
+    ${ctx.renderNav({ showBack: true })}
+  `;
+
+  container.innerHTML = wizardShell(ctx, 1, 5);
+  const panel = container.querySelector('.wizard-step-enter');
+  if (panel) panel.innerHTML = content;
+
+  container.querySelectorAll('.option-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const opt = (card as HTMLElement).dataset.option;
+      ctx.updateState({ j1IsStudent: opt === 'student' });
+      goSub(ctx, 'entry');
+    });
+  });
+
+  container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'visa'));
   initIcons();
 }
 
@@ -121,7 +154,7 @@ function renderEntryStep(ctx: WizardContext): void {
     <p class="text-caption text-text-muted mb-6 flex items-center gap-1">
       <i data-lucide="help-circle" class="w-3.5 h-3.5"></i> ${t('status.q2Help')}
     </p>
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
         <label class="text-body-sm text-text-secondary block mb-2">${t('status.month')}</label>
         <select id="entry-month" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" aria-label="${t('status.month')}">
@@ -157,7 +190,7 @@ function renderEntryStep(ctx: WizardContext): void {
     goSub(ctx, 'confirm');
   });
 
-  container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'visa'));
+  container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, state.visaType === 'J-1' ? 'j1type' : 'visa'));
   initIcons();
 }
 
@@ -225,7 +258,7 @@ function renderPriorJ1Step(ctx: WizardContext): void {
       ctx.updateState({ hadPriorJ1: opt === 'yes' });
       // Calculate SPT now
       const s = ctx.updateState({});
-      const result = calculateSPT(s.visaType || 'F-1', s.entryYear || TAX_YEAR, s.hadPriorJ1 || false);
+      const result = calculateSPT(s.visaType || 'F-1', s.entryYear || TAX_YEAR, s.hadPriorJ1 || false, s.j1IsStudent !== false);
       ctx.updateState({
         taxStatus: result.status,
         exemptYearsUsed: result.exemptYearsUsed,
@@ -249,7 +282,7 @@ function renderIncomeStep(ctx: WizardContext): void {
 
   // Ensure SPT is calculated
   if (!state.taxStatus) {
-    const result = calculateSPT(state.visaType || 'F-1', state.entryYear || TAX_YEAR, state.hadPriorJ1 || false);
+    const result = calculateSPT(state.visaType || 'F-1', state.entryYear || TAX_YEAR, state.hadPriorJ1 || false, state.j1IsStudent !== false);
     ctx.updateState({
       taxStatus: result.status,
       exemptYearsUsed: result.exemptYearsUsed,
@@ -295,7 +328,7 @@ function renderResultStep(ctx: WizardContext): void {
   const lang = getLang();
   const isNRA = state.taxStatus === 'NRA';
 
-  const result = calculateSPT(state.visaType || 'F-1', state.entryYear || TAX_YEAR, state.hadPriorJ1 || false);
+  const result = calculateSPT(state.visaType || 'F-1', state.entryYear || TAX_YEAR, state.hadPriorJ1 || false, state.j1IsStudent !== false);
 
   const statusTitle = isNRA ? t('status.resultNRA') : t('status.resultRA');
   const statusMeaning = isNRA ? t('status.nraMeaning') : t('status.raMeaning');

@@ -6,6 +6,7 @@ const STORAGE_KEY = 'shuiyi_wizard';
 export interface WizardState {
   // Status wizard
   visaType?: string;
+  j1IsStudent?: boolean;
   entryMonth?: number;
   entryYear?: number;
   calendarYears?: number;

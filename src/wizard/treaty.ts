@@ -131,6 +131,7 @@ function renderResultStep(ctx: WizardContext): void {
           <h2 class="text-h2 text-text">${t('treaty.terminated')}</h2>
         </div>
         <p class="text-body text-text-secondary">${t('treaty.terminatedDesc').replace('{country}', countryName).replace('{status}', statusText).replace('{date}', terminated.date)}</p>
+        <p class="text-body text-text-secondary mt-3">${t('treaty.terminatedGuidance')}</p>
       </div>
     `;
   } else if (!treaty || !treaty.hasTreaty) {
@@ -173,13 +174,13 @@ function renderResultStep(ctx: WizardContext): void {
           <i data-lucide="sparkles" class="w-6 h-6 text-accent"></i>
           <span class="text-body text-text-secondary">${t('treaty.savings')}</span>
         </div>
-        <div class="count-up text-display text-primary font-extrabold mb-2" id="savings-number">${savingsDisplay}</div>
+        <div class="count-up text-h1 text-primary font-extrabold mb-2" id="savings-number" aria-label="${savingsDisplay}">${savingsDisplay}</div>
         <p class="text-body text-text-secondary">${t('treaty.perYear')}</p>
         <p class="text-caption text-text-muted mt-2">${t('treaty.based').replace('{country}', countryName).replace('{article}', treaty.article || '')}</p>
       </div>
 
       ${result ? `
-        <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div class="p-4 border-[1.5px] border-border rounded-soft text-center">
             <p class="text-caption text-text-muted mb-1">${t('treaty.withTreaty')}</p>
             <p class="text-h2 text-primary font-bold">$${result.taxWithTreaty.toLocaleString()}</p>
@@ -235,7 +236,10 @@ function renderResultStep(ctx: WizardContext): void {
   `;
 
   container.querySelector('#btn-next')?.addEventListener('click', () => ctx.goToSection('fica'));
-  container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'income'));
+  container.querySelector('#btn-back')?.addEventListener('click', () => {
+    const info = getTreatyInfo(countryCode);
+    goSub(ctx, info && info.hasTreaty && info.wageExemption ? 'income' : 'country');
+  });
   initIcons();
 }
 

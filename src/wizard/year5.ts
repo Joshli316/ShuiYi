@@ -1,12 +1,11 @@
 // Year-5 Transition Countdown
-import { t, getLang } from '../i18n';
+import { t } from '../i18n';
 import { STUDENT_EXEMPT_YEARS, TAX_YEAR } from '../data/constants';
 import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
 
 export function renderYear5(ctx: WizardContext): void {
   const { container, state } = ctx;
-  const lang = getLang();
   const entryYear = state.entryYear || TAX_YEAR;
   const exemptYearsRemaining = state.exemptYearsRemaining ?? STUDENT_EXEMPT_YEARS;
   const exemptYearsUsed = state.exemptYearsUsed ?? 1;
@@ -27,20 +26,20 @@ export function renderYear5(ctx: WizardContext): void {
   ];
 
   const checklist = alreadyTransitioned ? [
-    lang === 'zh' ? '使用1040表报税（不再使用1040-NR）' : 'File Form 1040 (not 1040-NR)',
-    lang === 'zh' ? '申报全球收入' : 'Report worldwide income',
-    lang === 'zh' ? '可以申请标准扣除和税收抵免' : 'Claim standard deduction and credits',
-    lang === 'zh' ? '考虑咨询税务专业人员' : 'Consider consulting a tax professional',
+    t('year5.checklistTransitioned1'),
+    t('year5.checklistTransitioned2'),
+    t('year5.checklistTransitioned3'),
+    t('year5.checklistTransitioned4'),
   ] : exemptYearsRemaining <= 2 ? [
-    lang === 'zh' ? '了解第5年之后会发生什么变化' : 'Understand what changes after year 5',
-    lang === 'zh' ? '开始记录全球收入' : 'Start tracking worldwide income',
-    lang === 'zh' ? '考虑提前咨询税务专业人员' : 'Consider consulting a tax professional early',
-    lang === 'zh' ? `标记日历：${transitionYear}年是过渡年` : `Mark your calendar: ${transitionYear} is your transition year`,
+    t('year5.checklistSoon1'),
+    t('year5.checklistSoon2'),
+    t('year5.checklistSoon3'),
+    t('year5.checklistSoon4').replace('{year}', String(transitionYear)),
   ] : [
-    lang === 'zh' ? '继续以NRA身份报税' : 'Continue filing as an NRA',
-    lang === 'zh' ? '每年提交8843表' : 'File Form 8843 each year',
-    lang === 'zh' ? '利用条约优惠（如适用）' : 'Take advantage of treaty benefits (if applicable)',
-    lang === 'zh' ? '以后记得回来查看倒计时' : 'Come back to check your countdown later',
+    t('year5.checklistNRA1'),
+    t('year5.checklistNRA2'),
+    t('year5.checklistNRA3'),
+    t('year5.checklistNRA4'),
   ];
 
   container.innerHTML = `
@@ -56,8 +55,8 @@ export function renderYear5(ctx: WizardContext): void {
         <div class="result-enter">
           <!-- Circular countdown -->
           <div class="flex flex-col items-center mb-8">
-            <div class="relative w-32 h-32 mb-4">
-              <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
+            <div class="relative w-24 h-24 sm:w-32 sm:h-32 mb-4">
+              <svg class="w-24 h-24 sm:w-32 sm:h-32 transform -rotate-90" viewBox="0 0 100 100" role="img" aria-label="${t('year5.remaining').replace('{years}', String(exemptYearsRemaining))}">
                 <circle cx="50" cy="50" r="45" fill="none" stroke="#E5E7EB" stroke-width="8"/>
                 <circle cx="50" cy="50" r="45" fill="none" stroke="${alreadyTransitioned ? '#D97706' : '#2D9F6F'}" stroke-width="8" stroke-linecap="round"
                   stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
@@ -65,7 +64,7 @@ export function renderYear5(ctx: WizardContext): void {
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center">
                 <span class="text-display ${alreadyTransitioned ? 'text-warning' : 'text-primary'}">${alreadyTransitioned ? '0' : exemptYearsRemaining}</span>
-                <span class="text-caption text-text-muted">${lang === 'zh' ? '年' : 'years'}</span>
+                <span class="text-caption text-text-muted">${t('year5.yearLabel')}</span>
               </div>
             </div>
 
@@ -79,7 +78,7 @@ export function renderYear5(ctx: WizardContext): void {
           </div>
 
           <!-- Timeline -->
-          <div class="flex items-center justify-between mb-8 px-4">
+          <div class="flex items-center justify-between mb-8 px-4 overflow-x-auto" role="list" aria-label="${t('year5.title')}">
             ${Array.from({ length: total }, (_, i) => {
               const year = entryYear + i;
               const isCurrent = i + 1 === current;
@@ -90,8 +89,8 @@ export function renderYear5(ctx: WizardContext): void {
                   <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${isPast ? 'bg-primary text-white' : isCurrent ? 'bg-primary text-white ring-4 ring-primary-light' : 'bg-border text-text-muted'}">
                     ${i + 1}
                   </div>
-                  <span class="text-[10px] text-text-muted mt-1">${year}</span>
-                  ${isTransition ? `<span class="text-[9px] text-warning font-semibold mt-0.5">${lang === 'zh' ? '过渡' : 'change'}</span>` : ''}
+                  <span class="text-xs text-text-muted mt-1">${year}</span>
+                  ${isTransition ? `<span class="text-[11px] text-warning font-semibold mt-0.5">${t('year5.transition')}</span>` : ''}
                 </div>
                 ${i < total - 1 ? `<div class="flex-1 h-0.5 ${isPast ? 'bg-primary' : 'bg-border'} mx-1"></div>` : ''}
               `;
@@ -100,7 +99,7 @@ export function renderYear5(ctx: WizardContext): void {
 
           <!-- What changes -->
           <div class="space-y-4 mb-8">
-            <h3 class="text-body-sm font-semibold text-text">${lang === 'zh' ? '第5年后会有什么变化' : 'What changes after year 5'}</h3>
+            <h3 class="text-body-sm font-semibold text-text">${t('year5.whatChanges')}</h3>
             ${changes.map(c => `
               <div class="flex items-start gap-3 p-3 border-[1.5px] border-border rounded-soft">
                 <i data-lucide="${c.icon}" class="w-5 h-5 text-${c.color} mt-0.5 flex-shrink-0"></i>

@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-primary: #2D9F6F;
+  --color-primary-dark: #1E7A52;
+  --color-primary-light: #E8F5EE;
+  --color-accent: #F5A623;
+  --color-accent-dark: #D4891A;
+  --color-bg: #FAFAF8;
+  --color-surface: #FFFFFF;
+  --color-text: #1A1A1A;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #9CA3AF;
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+  --color-error: #DC2626;
+  --color-border: #E5E7EB;
+  --color-border-focus: #2D9F6F;
+
+  /* Font families */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-chinese: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
+
+  /* Font sizes */
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.5;
+  --text-caption--letter-spacing: 0.01em;
+  --text-body-sm: 1rem;
+  --text-body-sm--line-height: 1.5;
+  --text-body-sm--font-weight: 500;
+  --text-body: 1.125rem;
+  --text-body--line-height: 1.6;
+  --text-h3: 1.25rem;
+  --text-h3--line-height: 1.4;
+  --text-h3--font-weight: 600;
+  --text-h2: 1.5rem;
+  --text-h2--line-height: 1.3;
+  --text-h2--font-weight: 600;
+  --text-h1: 2rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 700;
+  --text-h1--letter-spacing: -0.01em;
+  --text-display: 3rem;
+  --text-display--line-height: 1.1;
+  --text-display--font-weight: 800;
+  --text-display--letter-spacing: -0.02em;
+  --text-btn: 1rem;
+  --text-btn--line-height: 1;
+  --text-btn--font-weight: 600;
+  --text-btn--letter-spacing: 0.02em;
+
+  /* Border radius */
+  --radius-sharp: 8px;
+  --radius-medium: 6px;
+  --radius-soft: 12px;
+  --radius-pill: 9999px;
+  --radius-celebrate: 16px;
+
+  /* Shadows */
+  --shadow-wizard: 0 2px 8px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.08);
+  --shadow-btn-hover: 0 2px 8px rgba(45,159,111,0.3);
+}

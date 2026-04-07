@@ -63,7 +63,7 @@ const strings: Record<string, StringPair> = {
   'lang.toggle': { en: '中文', zh: 'EN' },
 
   // Disclaimer
-  'disclaimer.text': { en: 'For informational purposes only. This is not tax advice. Consult a qualified tax professional for your specific situation.', zh: '仅供参考，不构成税务建议。请咨询专业税务人员了解您的具体情况。' },
+  'disclaimer.text': { en: 'For informational purposes only. This is not tax advice. Consult a qualified tax professional for your specific situation.', zh: '仅供参考，不构成税务建议。请咨询专业税务人员了解你的具体情况。' },
   'disclaimer.reviewFields': { en: 'Review all fields before signing and mailing.', zh: '签名和邮寄前请核实所有信息。' },
 
   // Progress bar
@@ -80,16 +80,29 @@ const strings: Record<string, StringPair> = {
   'landing.heroSubtext': { en: 'Find out in 5 minutes. Free. No account needed.', zh: '5分钟搞定。完全免费。无需注册。' },
   'landing.cta': { en: 'Find out now', zh: '立即查询' },
   'landing.value1Title': { en: 'Know your status', zh: '了解你的税务身份' },
-  'landing.value1Desc': { en: 'Are you a Nonresident Alien or Resident Alien? We\'ll figure it out together.', zh: '你是非居民外国人还是居民外国人？我们帮你搞清楚。' },
+  'landing.value1Desc': { en: 'NRA or RA? Answer a few questions and find out.', zh: 'NRA还是RA？回答几个问题就知道了。' },
   'landing.value2Title': { en: 'Get your forms', zh: '获取你的税表' },
-  'landing.value2Desc': { en: 'Generate a pre-filled Form 8843 PDF ready to print and mail.', zh: '生成预填好的8843表格PDF，可直接打印邮寄。' },
-  'landing.value3Title': { en: 'Save money', zh: '省钱' },
-  'landing.value3Desc': { en: 'Calculate your tax treaty benefits. Students save $500-$3,000 per year on average.', zh: '计算你的税务条约优惠。学生平均每年可节省$500-$3,000。' },
-  'landing.socialProof': { en: 'Built from 18 research reports analyzing 1.2M international students\' needs', zh: '基于18份研究报告，分析120万国际学生的需求' },
-  'landing.stats1': { en: '1.2M international students', zh: '120万国际学生' },
+  'landing.value2Desc': { en: 'Get a pre-filled Form 8843 PDF. Print it, sign it, mail it.', zh: '获取预填好的8843表PDF。打印、签名、邮寄。' },
+  'landing.value3Title': { en: 'Calculate treaty savings', zh: '计算条约节省' },
+  'landing.value3Desc': { en: 'Check if your country\'s tax treaty can save you money. Students from treaty countries save $500-$3,000 per year on average.', zh: '查看你的国家条约是否能帮你省钱。来自条约国家的学生平均每年可节省$500-$3,000。' },
+  'landing.socialProof': { en: 'Designed for the 1.2M international students in the US. Based on IRS publications and tax treaty data.', zh: '为120万在美国际学生设计。基于IRS出版物和税务条约数据。' },
+  'landing.stats1': { en: '14 treaty countries covered', zh: '覆盖14个条约国家' },
   'landing.stats2': { en: '$0 cost', zh: '完全免费' },
-  'landing.stats3': { en: '5 minutes', zh: '5分钟完成' },
+  'landing.stats3': { en: '5-minute guide', zh: '5分钟指南' },
   'landing.taxSeason': { en: 'Tax season doesn\'t have to be scary.', zh: '报税不用慌。' },
+
+  // Landing FAQ
+  'landing.faqTitle': { en: 'Common questions', zh: '常见问题' },
+  'landing.faq1q': { en: 'Do F-1 students need to file US taxes?', zh: 'F-1学生需要报美国税吗？' },
+  'landing.faq1a': { en: 'Yes. Every F-1 student must file Form 8843, even with zero income. If you earned money, you also file Form 1040-NR.', zh: '是的。每个F-1学生都必须提交8843表，即使没有收入。如果你有收入，还需要提交1040-NR。' },
+  'landing.faq2q': { en: 'What is Form 8843?', zh: '什么是8843表？' },
+  'landing.faq2a': { en: 'A one-page IRS form that tells the government you\'re an exempt individual (student/scholar). It keeps your days from counting toward the Substantial Presence Test.', zh: '一页的IRS表格，告诉政府你是豁免个人（学生/学者）。它防止你的在美天数被计入实质性存在测试。' },
+  'landing.faq3q': { en: 'Can I get a FICA refund as an international student?', zh: '国际学生可以申请FICA退款吗？' },
+  'landing.faq3a': { en: 'If your employer withheld Social Security and Medicare taxes during your first 5 years on an F-1, J-1, M-1, or Q-1 visa, you\'re owed that money back. ShuiYi shows you how to claim it.', zh: '如果你的雇主在你持F-1、J-1、M-1或Q-1签证的前5年扣缴了社会保障和医疗保险税，这笔钱应该退给你。税易教你怎么申请。' },
+  'landing.faq4q': { en: 'What\'s the difference between NRA and RA?', zh: 'NRA和RA有什么区别？' },
+  'landing.faq4a': { en: 'Nonresident Aliens (NRA) only pay tax on US income and file 1040-NR. Resident Aliens (RA) pay tax on worldwide income and file 1040 like US citizens. Most students are NRA for their first 5 years.', zh: '非居民外国人（NRA）只对美国收入交税，用1040-NR报税。居民外国人（RA）对全球收入交税，像美国公民一样用1040报税。大多数学生前5年是NRA。' },
+  'landing.faq5q': { en: 'Does my country have a tax treaty with the US?', zh: '我的国家和美国有税务条约吗？' },
+  'landing.faq5a': { en: 'China, India, South Korea, Japan, and 10 other countries have student tax treaties. Chinese students can exempt $5,000/year. ShuiYi calculates your specific savings.', zh: '中国、印度、韩国、日本等14个国家有学生税务条约。中国学生每年可免税$5,000。税易为你计算具体节省金额。' },
 
   // === SECTION NAVIGATION ===
   'nav.status': { en: 'Tax Status', zh: '税务身份' },
@@ -102,7 +115,7 @@ const strings: Record<string, StringPair> = {
   'nav.summary': { en: 'Your Checklist', zh: '你的清单' },
 
   // === STATUS WIZARD ===
-  'status.title': { en: 'Let\'s determine your tax status', zh: '让我们确认你的税务身份' },
+  'status.title': { en: 'What\'s your tax status?', zh: '你的税务身份是什么？' },
   'status.q1': { en: 'What visa are you on?', zh: '你持什么签证？' },
   'status.q1Help': { en: 'Select the visa type shown on your I-20 or DS-2019. If you\'re on OPT, you\'re still on F-1.', zh: '选择你的I-20或DS-2019上的签证类型。如果你在OPT期间，你仍然是F-1。' },
   'status.f1': { en: 'F-1 (Student)', zh: 'F-1（学生）' },
@@ -112,6 +125,11 @@ const strings: Record<string, StringPair> = {
   'status.q1visa': { en: 'Q-1 (Cultural Exchange)', zh: 'Q-1（文化交流）' },
   'status.h1b': { en: 'H-1B (Work Visa)', zh: 'H-1B（工作签证）' },
   'status.other': { en: 'Other', zh: '其他' },
+
+  'status.j1type': { en: 'Are you a student or a teacher/researcher?', zh: '你是学生还是教师/研究员？' },
+  'status.j1typeHelp': { en: 'J-1 students get 5 exempt years. Teachers and researchers get 2.', zh: 'J-1学生有5年豁免期。教师和研究员有2年。' },
+  'status.j1student': { en: 'Student', zh: '学生' },
+  'status.j1researcher': { en: 'Teacher / Researcher', zh: '教师/研究员' },
 
   'status.q2': { en: 'When did you first enter the US on this visa?', zh: '你何时首次持此签证入境美国？' },
   'status.q2Help': { en: 'Check your I-94 arrival record. Any part of a calendar year counts as a full year.', zh: '查看你的I-94入境记录。日历年中的任何时间都算一整年。' },
@@ -128,12 +146,12 @@ const strings: Record<string, StringPair> = {
   // Status result
   'status.resultNRA': { en: 'You are a Nonresident Alien (NRA)', zh: '你是非居民外国人（NRA）' },
   'status.resultRA': { en: 'You are likely a Resident Alien (RA)', zh: '你可能是居民外国人（RA）' },
-  'status.nraMeaning': { en: 'As an NRA, you file Form 1040-NR (not 1040) and are only taxed on US-source income. You must also file Form 8843.', zh: '作为NRA，你需要填报1040-NR表（不是1040表），只需对美国来源的收入纳税。你还必须填报8843表。' },
-  'status.raMeaning': { en: 'As an RA, you file like a US citizen using Form 1040 and are taxed on worldwide income. Standard deduction and credits apply.', zh: '作为RA，你像美国公民一样使用1040表报税，需对全球收入纳税。可享受标准扣除和税收抵免。' },
+  'status.nraMeaning': { en: 'You file Form 1040-NR (not the regular 1040) and only pay tax on US income. You also need to file Form 8843.', zh: '你需要填1040-NR表（不是普通的1040），只对美国收入交税。你还需要交8843表。' },
+  'status.raMeaning': { en: 'You file the same Form 1040 as US citizens and pay tax on worldwide income. You get the standard deduction and credits.', zh: '你和美国公民一样填1040表，需对全球收入交税。可以用标准扣除和税收抵免。' },
   'status.exemptYears': { en: 'Exempt years used: {used} of {total}', zh: '已使用豁免年数：{used}/{total}' },
   'status.yearsRemaining': { en: '{years} exempt years remaining', zh: '剩余{years}年豁免期' },
-  'status.nraNext': { en: 'Let\'s get your Form 8843 ready and check for money-saving treaty benefits.', zh: '接下来帮你准备8843表格，并查看是否有省钱的条约优惠。' },
-  'status.raNext': { en: 'You file like a US resident. Here\'s what that means for you:', zh: '你需要按美国居民方式报税。以下是对你的具体影响：' },
+  'status.nraNext': { en: 'Next up: your Form 8843 and treaty benefits.', zh: '接下来：你的8843表格和条约优惠。' },
+  'status.raNext': { en: 'You file like a US resident. Here\'s what changes:', zh: '你按美国居民方式报税。以下是变化：' },
   'status.irsSource': { en: 'Source: IRS Publication 519', zh: '来源：IRS Publication 519' },
   'status.continueToForm': { en: 'Continue to Form 8843', zh: '继续填写8843表格' },
   'status.continueToImmigration': { en: 'Continue to Immigration FAQ', zh: '继续查看移民常见问题' },
@@ -149,20 +167,20 @@ const strings: Record<string, StringPair> = {
   'status.yesIncome': { en: 'Yes, I earned income', zh: '是的，我有收入' },
 
   // === FORM 8843 ===
-  'form8843.title': { en: 'Let\'s fill out your Form 8843', zh: '让我们填写你的8843表格' },
-  'form8843.subtitle': { en: 'Every international student must file this form, even with no income.', zh: '每个国际学生都必须提交此表格，即使没有收入。' },
+  'form8843.title': { en: 'Fill out your Form 8843', zh: '填写你的8843表格' },
+  'form8843.subtitle': { en: 'All international students file this — even with no income.', zh: '所有国际学生都要交这个表——即使没有收入。' },
   'form8843.name': { en: 'Full legal name (as on passport)', zh: '法定全名（护照上的姓名）' },
   'form8843.address': { en: 'US address', zh: '美国地址' },
   'form8843.ssn': { en: 'SSN or ITIN (optional)', zh: 'SSN或ITIN（选填）' },
-  'form8843.ssnHelp': { en: 'Enter if you have one. Many students don\'t — that\'s OK.', zh: '如果有的话请填写。很多学生没有——没关系。' },
+  'form8843.ssnHelp': { en: 'If you have one, enter it. Most students don\'t — that\'s fine.', zh: '有的话就填。大多数学生没有——没事。' },
   'form8843.citizenship': { en: 'Country of citizenship', zh: '国籍' },
   'form8843.taxResidence': { en: 'Country of tax residence', zh: '税务居住国' },
   'form8843.daysPresent': { en: 'Days present in the US during {year}', zh: '{year}年在美天数' },
   'form8843.daysHelp': { en: 'Count every day you were physically in the US, including partial days.', zh: '计算你在美国实际存在的每一天，包括部分天数。' },
   'form8843.school': { en: 'Academic institution name', zh: '学校名称' },
   'form8843.schoolAddress': { en: 'Academic institution address', zh: '学校地址' },
-  'form8843.compliant': { en: 'Did you substantially comply with your visa requirements?', zh: '你是否实质性遵守了签证要求？' },
-  'form8843.compliantHelp': { en: 'If you maintained your student status and followed visa rules, select Yes.', zh: '如果你保持了学生身份并遵守签证规定，请选择"是"。' },
+  'form8843.compliant': { en: 'Did you follow your visa rules this year?', zh: '你今年遵守签证规定了吗？' },
+  'form8843.compliantHelp': { en: 'If you kept your student status and didn\'t violate any visa terms, select Yes.', zh: '如果你保持了学生身份且没有违反签证条款，选"是"。' },
 
   // Form 8843 result
   'form8843.ready': { en: 'Your Form 8843 is ready!', zh: '你的8843表格已准备好！' },
@@ -179,17 +197,17 @@ const strings: Record<string, StringPair> = {
   'form8843.skipToTreaty': { en: 'Skip to treaty benefits', zh: '跳到条约优惠' },
 
   // === TREATY CALCULATOR ===
-  'treaty.title': { en: 'Check your tax treaty benefits', zh: '查看你的税务条约优惠' },
-  'treaty.subtitle': { en: 'Many countries have tax treaties with the US that can save students money.', zh: '许多国家与美国签有税务条约，可以帮学生省钱。' },
+  'treaty.title': { en: 'Does your country have a tax treaty?', zh: '你的国家有税务条约吗？' },
+  'treaty.subtitle': { en: 'Some countries have deals with the US that reduce how much tax students pay.', zh: '一些国家与美国有协议，可以减少学生需要缴的税。' },
   'treaty.country': { en: 'What is your country of citizenship?', zh: '你的国籍是什么？' },
   'treaty.selectCountry': { en: 'Select your country', zh: '选择你的国家' },
   'treaty.income': { en: 'Approximately how much US income did you earn this year?', zh: '你今年大约有多少美国收入？' },
   'treaty.incomeHelp': { en: 'Include wages, stipends, and taxable scholarships. Round to the nearest $100.', zh: '包括工资、津贴和应税奖学金。四舍五入到最接近的$100。' },
 
   // Treaty results
-  'treaty.savings': { en: 'You could save approximately', zh: '你大约可以节省' },
-  'treaty.perYear': { en: 'per year in potential tax savings', zh: '每年的潜在税务节省' },
-  'treaty.based': { en: 'Based on the US-{country} tax treaty ({article})', zh: '基于美中税务条约（{article}）' },
+  'treaty.savings': { en: 'Estimated savings', zh: '预估节省' },
+  'treaty.perYear': { en: 'per year, based on your inputs', zh: '每年，基于你的输入' },
+  'treaty.based': { en: 'Based on the US-{country} tax treaty ({article})', zh: '基于美国与{country}的税务条约（{article}）' },
   'treaty.exemptAmount': { en: 'Treaty exemption amount: ${amount}', zh: '条约豁免金额：${amount}' },
   'treaty.withTreaty': { en: 'Tax with treaty', zh: '使用条约后的税额' },
   'treaty.withoutTreaty': { en: 'Tax without treaty', zh: '不使用条约的税额' },
@@ -214,22 +232,22 @@ const strings: Record<string, StringPair> = {
   'treaty.chinaSurvivesRA': { en: 'Note: China\'s treaty benefit survives transition to Resident Alien status — even after year 5, you may still claim the $5,000 exemption.', zh: '注意：中国的条约优惠在转为居民外国人后仍然有效——即使超过第5年，你仍可申请$5,000免税额。' },
 
   // === FICA ===
-  'fica.title': { en: 'Check your FICA exemption', zh: '检查你的FICA豁免' },
-  'fica.subtitle': { en: 'International students on certain visas are exempt from Social Security and Medicare taxes.', zh: '持特定签证的国际学生可免缴社会保障和医疗保险税。' },
-  'fica.employed': { en: 'Are you currently employed?', zh: '你目前有工作吗？' },
-  'fica.employedHelp': { en: 'Include on-campus jobs, OPT, CPT, or any other authorized employment.', zh: '包括校内工作、OPT、CPT或其他经授权的工作。' },
+  'fica.title': { en: 'Are you paying FICA taxes you don\'t owe?', zh: '你是否在缴纳不该交的FICA税？' },
+  'fica.subtitle': { en: 'Students on F-1, J-1, M-1, or Q-1 visas usually don\'t owe Social Security or Medicare taxes.', zh: 'F-1、J-1、M-1或Q-1签证学生通常不需要缴纳社会保障或医疗保险税。' },
+  'fica.employed': { en: 'Do you have a job right now?', zh: '你现在有工作吗？' },
+  'fica.employedHelp': { en: 'On-campus jobs, OPT, CPT, and any other paid work all count.', zh: '校内工作、OPT、CPT和其他任何有薪工作都算。' },
   'fica.payStub': { en: 'Check your most recent pay stub: do you see deductions for Social Security or Medicare?', zh: '查看你最近的工资单：是否有社会保障（Social Security）或医疗保险（Medicare）扣款？' },
   'fica.payStubHelp': { en: 'Look for line items labeled "FICA," "Social Security," "SS," "Medicare," or "Med."', zh: '查找标注"FICA"、"Social Security"、"SS"、"Medicare"或"Med"的项目。' },
 
   // FICA results
-  'fica.exempt': { en: 'You are FICA exempt!', zh: '你可以免缴FICA！' },
-  'fica.exemptDesc': { en: 'As a {visa} visa holder in year {year} of {total}, your employer should NOT withhold Social Security or Medicare taxes.', zh: '作为{visa}签证持有者，在{total}年豁免期的第{year}年，你的雇主不应扣缴社会保障或医疗保险税。' },
-  'fica.notExempt': { en: 'FICA applies to your wages', zh: 'FICA适用于你的工资' },
-  'fica.notExemptDesc': { en: 'You\'ve exceeded the 5-year exempt period or your visa type requires FICA. This is normal.', zh: '你已超过5年豁免期或你的签证类型需要缴纳FICA。这是正常的。' },
-  'fica.refundTitle': { en: 'You may be entitled to a refund', zh: '你可能有权获得退款' },
-  'fica.refundAmount': { en: 'Approximately ${amount} in FICA was withheld when it shouldn\'t have been.', zh: '大约${amount}的FICA被错误扣缴了。' },
-  'fica.refundStep1': { en: 'First, ask your employer to correct the withholding and refund the FICA taxes (IRC Section 3121(b)(19))', zh: '首先，要求雇主更正扣税并退还FICA税款（IRC Section 3121(b)(19)）' },
-  'fica.refundStep2': { en: 'If your employer refuses, file Form 843 (Claim for Refund) with Form 8316', zh: '如果雇主拒绝，提交843表（退款申请）和8316表' },
+  'fica.exempt': { en: 'You don\'t owe FICA', zh: '你不需要缴FICA' },
+  'fica.exemptDesc': { en: 'On a {visa} visa in year {year} of {total}, your employer should NOT take out Social Security or Medicare from your paycheck.', zh: '持{visa}签证，在{total}年豁免期的第{year}年，你的雇主不应从你的工资中扣除社会保障或医疗保险。' },
+  'fica.notExempt': { en: 'You owe FICA — that\'s normal', zh: '你需要缴FICA——这很正常' },
+  'fica.notExemptDesc': { en: 'Your 5-year exemption period is over, or your visa type requires FICA. Nothing to worry about.', zh: '你的5年豁免期已过，或者你的签证类型要求缴纳FICA。不用担心。' },
+  'fica.refundTitle': { en: 'You could get this money back', zh: '你可以把这笔钱要回来' },
+  'fica.refundAmount': { en: 'About ${amount} in FICA was taken from your paycheck when it shouldn\'t have been.', zh: '大约${amount}的FICA被从你的工资中错误扣除了。' },
+  'fica.refundStep1': { en: 'Ask your employer to fix it and refund the FICA — cite IRC Section 3121(b)(19)', zh: '要求雇主更正并退还FICA——引用IRC Section 3121(b)(19)' },
+  'fica.refundStep2': { en: 'If they won\'t, file Form 843 + Form 8316 with the IRS yourself', zh: '如果雇主不配合，自己向IRS提交843表和8316表' },
   'fica.refundStep3': { en: 'Attach your W-2, proof of visa status (I-20), and employment authorization', zh: '附上你的W-2、签证身份证明（I-20）和工作授权文件' },
   'fica.refundDeadline': { en: 'Deadline: 3 years from the date you filed the return for that year', zh: '截止日期：从当年报税日起3年内' },
   'fica.employerLetter': { en: 'Download employer notification letter', zh: '下载雇主通知信' },
@@ -237,8 +255,8 @@ const strings: Record<string, StringPair> = {
   'fica.rate': { en: 'FICA rate: 7.65% (6.2% Social Security + 1.45% Medicare)', zh: 'FICA税率：7.65%（6.2%社会保障 + 1.45%医疗保险）' },
 
   // === YEAR-5 COUNTDOWN ===
-  'year5.title': { en: 'Year-5 Transition Countdown', zh: '第5年过渡倒计时' },
-  'year5.subtitle': { en: 'Your tax obligations change after 5 calendar years in the US.', zh: '在美国超过5个日历年后，你的税务义务会发生变化。' },
+  'year5.title': { en: 'Your 5-Year Exemption Timeline', zh: '你的5年豁免时间线' },
+  'year5.subtitle': { en: 'After 5 calendar years in the US, your tax rules change.', zh: '在美国满5个日历年后，你的税务规则会变。' },
   'year5.remaining': { en: 'You have {years} exempt years remaining', zh: '你还有{years}年豁免期' },
   'year5.current': { en: 'You are in year {current} of {total}', zh: '你处于{total}年豁免期的第{current}年' },
   'year5.transitionIn': { en: 'Your status will change in {year}', zh: '你的身份将在{year}年变更' },
@@ -255,15 +273,15 @@ const strings: Record<string, StringPair> = {
   'year5.checklist': { en: 'What to do now', zh: '现在该做什么' },
 
   // === IMMIGRATION ===
-  'immigration.title': { en: 'Immigration & Tax FAQ', zh: '移民与税务常见问题' },
-  'immigration.subtitle': { en: 'Common questions about how taxes affect your immigration status. Most tax errors are fixable.', zh: '关于税务如何影响移民身份的常见问题。大多数税务错误都是可以补救的。' },
+  'immigration.title': { en: 'Will taxes affect my visa?', zh: '税务会影响我的签证吗？' },
+  'immigration.subtitle': { en: 'Short answer: probably not. Here are the details.', zh: '简短回答：大概率不会。以下是具体情况。' },
   'immigration.riskLow': { en: 'Low risk', zh: '低风险' },
   'immigration.riskModerate': { en: 'Moderate', zh: '中等风险' },
   'immigration.riskHigh': { en: 'Important', zh: '重要' },
   'immigration.mythVsReality': { en: 'Myth vs Reality', zh: '误解与事实' },
   'immigration.myth': { en: 'Myth', zh: '误解' },
   'immigration.reality': { en: 'Reality', zh: '事实' },
-  'immigration.calmNote': { en: 'Most tax errors are fixable. Filing an amendment shows good faith.', zh: '大多数税务错误都可以补救。提交修正申报表体现了你的诚意。' },
+  'immigration.calmNote': { en: 'Tax mistakes happen. You can file an amendment — that actually shows good faith.', zh: '税务错误很常见。你可以提交修正申报——这反而体现了你的诚意。' },
 
   // Immigration FAQs
   'immigration.q1': { en: 'Will a tax mistake affect my F-1/J-1 visa renewal?', zh: '税务错误会影响我的F-1/J-1签证续签吗？' },
@@ -299,7 +317,7 @@ const strings: Record<string, StringPair> = {
 
   // === STATE TAX ===
   'state.title': { en: 'State Tax Check', zh: '州税检查' },
-  'state.subtitle': { en: 'Some states have their own income tax rules for international students.', zh: '一些州对国际学生有自己的所得税规定。' },
+  'state.subtitle': { en: 'Your state may have its own income tax — and not all states honor federal treaties.', zh: '你的州可能有自己的所得税——而且不是所有州都承认联邦条约。' },
   'state.select': { en: 'What state do you live in?', zh: '你住在哪个州？' },
   'state.selectPlaceholder': { en: 'Select your state', zh: '选择你的州' },
   'state.noTax': { en: 'No state income tax', zh: '无州所得税' },
@@ -314,7 +332,7 @@ const strings: Record<string, StringPair> = {
 
   // === SUMMARY ===
   'summary.title': { en: 'Your Personalized Tax Checklist', zh: '你的个人税务清单' },
-  'summary.subtitle': { en: 'Based on your answers, here\'s what you need to do.', zh: '根据你的回答，以下是你需要做的事情。' },
+  'summary.subtitle': { en: 'Here\'s your to-do list for this tax season.', zh: '这是你这个报税季的待办事项。' },
   'summary.status': { en: 'Your tax status: {status}', zh: '你的税务身份：{status}' },
   'summary.fileForm8843': { en: 'File Form 8843 (even with no income)', zh: '提交8843表（即使没有收入）' },
   'summary.file1040NR': { en: 'File Form 1040-NR (nonresident income tax return)', zh: '提交1040-NR（非居民所得税申报表）' },
@@ -327,9 +345,46 @@ const strings: Record<string, StringPair> = {
   'summary.stateReturn': { en: 'File {state} state tax return ({form})', zh: '提交{state}州税表（{form}）' },
   'summary.deadlineApril': { en: 'Federal deadline: April 15, {year}', zh: '联邦截止日期：{year}年4月15日' },
   'summary.deadlineJune': { en: 'Form 8843 deadline: June 15, {year}', zh: '8843表截止日期：{year}年6月15日' },
-  'summary.consultCPA': { en: 'Consider consulting a tax professional for your specific situation', zh: '建议咨询专业税务人员了解你的具体情况' },
-  'summary.shareText': { en: 'Share ShuiYi with classmates who might need help', zh: '分享税易给可能需要帮助的同学' },
+  'summary.consultCPA': { en: 'Talk to a tax professional if your situation is complex', zh: '如果情况复杂，找专业税务人员聊聊' },
+  'summary.shareText': { en: 'Send this to a classmate', zh: '发给同学' },
   'summary.done': { en: 'That\'s it! You\'ve got this.', zh: '就这些！你可以的。' },
+  'summary.confirmRestart': { en: 'Start over? Your answers will be cleared.', zh: '重新开始？你的回答将被清除。' },
+
+  // Form 8843 states
+  'form8843.generating': { en: 'Generating...', zh: '生成中...' },
+  'form8843.pdfError': { en: 'Error — try again', zh: '出错了——请重试' },
+  'form8843.downloaded': { en: 'Downloaded! Click to download again', zh: '已下载！点击重新下载' },
+
+  // FICA inline strings
+  'fica.notEmployedDesc': { en: 'FICA doesn\'t apply — you\'re not currently employed. If you start working, come back to check.', zh: 'FICA不适用——你目前没有工作。如果你开始工作，记得回来检查。' },
+  'fica.employerCorrect': { en: 'Your employer handled withholding correctly. No action needed.', zh: '你的雇主正确处理了扣税。无需任何操作。' },
+  'fica.howToGetRefund': { en: 'How to get your refund', zh: '如何获得退款' },
+
+  // Year-5 inline strings
+  'year5.whatChanges': { en: 'What changes after year 5', zh: '第5年后会有什么变化' },
+  'year5.yearLabel': { en: 'years', zh: '年' },
+  'year5.transition': { en: 'change', zh: '过渡' },
+  'year5.checklistTransitioned1': { en: 'File Form 1040 (not 1040-NR)', zh: '使用1040表报税（不再使用1040-NR）' },
+  'year5.checklistTransitioned2': { en: 'Report worldwide income', zh: '申报全球收入' },
+  'year5.checklistTransitioned3': { en: 'Claim standard deduction and credits', zh: '可以申请标准扣除和税收抵免' },
+  'year5.checklistTransitioned4': { en: 'Consider consulting a tax professional', zh: '考虑咨询税务专业人员' },
+  'year5.checklistSoon1': { en: 'Understand what changes after year 5', zh: '了解第5年之后会发生什么变化' },
+  'year5.checklistSoon2': { en: 'Start tracking worldwide income', zh: '开始记录全球收入' },
+  'year5.checklistSoon3': { en: 'Consider consulting a tax professional early', zh: '考虑提前咨询税务专业人员' },
+  'year5.checklistSoon4': { en: 'Mark your calendar: {year} is your transition year', zh: '标记日历：{year}年是过渡年' },
+  'year5.checklistNRA1': { en: 'Continue filing as an NRA', zh: '继续以NRA身份报税' },
+  'year5.checklistNRA2': { en: 'File Form 8843 each year', zh: '每年提交8843表' },
+  'year5.checklistNRA3': { en: 'Take advantage of treaty benefits (if applicable)', zh: '利用条约优惠（如适用）' },
+  'year5.checklistNRA4': { en: 'Come back to check your countdown later', zh: '以后记得回来查看倒计时' },
+
+  // Footer
+  'footer.sources': { en: 'Sources:', zh: '来源：' },
+
+  // Privacy
+  'landing.privacy': { en: 'Your data never leaves your browser. No accounts. No tracking.', zh: '你的数据不会离开浏览器。无需注册。无追踪。' },
+
+  // Treaty terminated guidance
+  'treaty.terminatedGuidance': { en: 'File as if no treaty exists. Standard NRA tax rates apply to your US income.', zh: '按无条约情况报税。标准NRA税率适用于你的美国收入。' },
 };
 
 export default strings;

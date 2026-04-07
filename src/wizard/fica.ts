@@ -1,5 +1,5 @@
 // FICA Exemption Checker
-import { t, getLang } from '../i18n';
+import { t } from '../i18n';
 import { FICA_TOTAL_RATE, FICA_EXEMPT_VISA_TYPES, STUDENT_EXEMPT_YEARS, calculateFICA } from '../data/constants';
 import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
@@ -124,7 +124,6 @@ function renderPaystubStep(ctx: WizardContext): void {
 
 function renderResultStep(ctx: WizardContext): void {
   const { container, state } = ctx;
-  const lang = getLang();
   const visa = state.visaType || 'F-1';
   const yearsUsed = state.exemptYearsUsed || 1;
   const isExempt = state.ficaExempt;
@@ -141,7 +140,7 @@ function renderResultStep(ctx: WizardContext): void {
           <i data-lucide="check-circle" class="w-7 h-7 text-primary"></i>
           <h2 class="text-h2 text-text">${t('fica.exempt')}</h2>
         </div>
-        <p class="text-body text-text-secondary">${lang === 'zh' ? 'FICA不适用——你目前没有工作。如果你开始工作，记得回来检查。' : 'FICA doesn\'t apply — you\'re not currently employed. If you start working, come back to check.'}</p>
+        <p class="text-body text-text-secondary">${t('fica.notEmployedDesc')}</p>
       </div>
     `;
   } else if (isExempt && ficaWithheld) {
@@ -157,7 +156,7 @@ function renderResultStep(ctx: WizardContext): void {
       </div>
 
       <div class="space-y-4 mb-6">
-        <h3 class="text-body-sm font-semibold text-text">${lang === 'zh' ? '如何获得退款' : 'How to get your refund'}</h3>
+        <h3 class="text-body-sm font-semibold text-text">${t('fica.howToGetRefund')}</h3>
         ${[t('fica.refundStep1'), t('fica.refundStep2'), t('fica.refundStep3')].map((step, i) => `
           <div class="flex items-start gap-3 text-body text-text-secondary">
             <span class="flex-shrink-0 w-6 h-6 rounded-full bg-accent/20 text-accent-dark text-sm font-semibold flex items-center justify-center">${i + 1}</span>
@@ -181,7 +180,7 @@ function renderResultStep(ctx: WizardContext): void {
           <h2 class="text-h2 text-text">${t('fica.exempt')}</h2>
         </div>
         <p class="text-body text-text-secondary">${t('fica.exemptDesc').replace('{visa}', visa).replace('{year}', String(yearsUsed)).replace('{total}', String(STUDENT_EXEMPT_YEARS))}</p>
-        <p class="text-body text-text-secondary mt-2">${lang === 'zh' ? '你的雇主正确处理了扣税。无需任何操作。' : 'Your employer handled withholding correctly. No action needed.'}</p>
+        <p class="text-body text-text-secondary mt-2">${t('fica.employerCorrect')}</p>
       </div>
       <p class="text-caption text-text-muted">${t('fica.ircSection')}</p>
     `;

@@ -9,6 +9,7 @@ import { renderYear5 } from './wizard/year5';
 import { renderImmigration } from './wizard/immigration';
 import { STATES } from './data/states';
 import { TREATY_DATA } from './data/treaties';
+import { TAX_YEAR } from './data/constants';
 import { initIcons } from './utils/icons';
 
 // Wizard context passed to each module
@@ -106,6 +107,8 @@ function setupLangToggle(): void {
 function updateLangToggle(): void {
   const label = document.getElementById('lang-label');
   if (label) label.textContent = t('lang.toggle');
+  const btn = document.getElementById('lang-toggle');
+  if (btn) btn.setAttribute('aria-label', getLang() === 'en' ? 'Switch to Chinese (中文)' : '切换到英文 (English)');
 }
 
 function setupDarkMode(): void {
@@ -117,6 +120,8 @@ function setupDarkMode(): void {
   btn?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
     saveState({ darkMode: isDark });
+    btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    btn.setAttribute('aria-pressed', String(isDark));
     // Update icon
     const icon = btn.querySelector('[data-lucide]');
     if (icon) {
@@ -131,6 +136,11 @@ function updateFooter(): void {
   if (disclaimer) disclaimer.textContent = t('disclaimer.text');
   const free = document.getElementById('footer-free');
   if (free) free.textContent = getLang() === 'zh' ? '免费开源。' : 'Free and open source.';
+  const sources = document.getElementById('footer-sources');
+  if (sources) {
+    const label = t('footer.sources');
+    sources.innerHTML = `${label} <a href="https://www.irs.gov/individuals/international-taxpayers" class="text-primary hover:underline" target="_blank" rel="noopener">IRS.gov</a> &middot; <a href="https://www.irs.gov/publications/p901" class="text-primary hover:underline" target="_blank" rel="noopener">Publication 901</a> &middot; <a href="https://www.irs.gov/publications/p519" class="text-primary hover:underline" target="_blank" rel="noopener">Publication 519</a>`;
+  }
 }
 
 function goToSection(sectionId: string): void {
@@ -159,11 +169,17 @@ function goToSection(sectionId: string): void {
   if (renderer) {
     renderer(ctx);
     initIcons();
+    // Add Space key support to all option cards
+    container.querySelectorAll('.option-card').forEach(card => {
+      card.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === ' ') { e.preventDefault(); (card as HTMLElement).click(); }
+      });
+    });
     // Focus first interactive element for keyboard/screen reader users
     setTimeout(() => {
       const target = container.querySelector('input, select, [role="button"], button:not([id="dark-toggle"]):not([id="lang-toggle"])') as HTMLElement;
       if (target) target.focus({ preventScroll: true });
-    }, 50);
+    }, 320);
   }
 }
 
@@ -188,7 +204,7 @@ function renderProgressBar(step: number, total: number, subtitle?: string): stri
       <div class="flex justify-between items-center mb-2">
         <span class="text-caption text-text-secondary">${stepLabel}</span>
       </div>
-      <div class="w-full h-1.5 bg-border rounded-pill overflow-hidden" role="progressbar" aria-valuenow="${step}" aria-valuemin="1" aria-valuemax="${total}" aria-label="${stepLabel}">
+      <div class="w-full h-1.5 bg-border rounded-pill overflow-hidden" role="progressbar" aria-valuenow="${step}" aria-valuemin="0" aria-valuemax="${total}" aria-label="${stepLabel}">
         <div class="progress-fill h-full bg-primary rounded-pill" style="width: ${pct}%"></div>
       </div>
       <p class="text-caption text-text-secondary italic mt-1">${subtitle || encouragement}</p>
@@ -225,7 +241,7 @@ function renderDisclaimer(): string {
 
 function renderOptionCard(id: string, label: string, selected: boolean, icon?: string): string {
   return `
-    <div class="option-card ${selected ? 'selected' : ''} border-[1.5px] border-border rounded-soft p-4 flex items-center gap-3" data-option="${id}" role="button" tabindex="0" aria-pressed="${selected}">
+    <div class="option-card ${selected ? 'selected' : ''} border-[1.5px] border-border rounded-soft p-4 flex items-center gap-3 min-h-[48px]" data-option="${id}" role="button" tabindex="0" aria-pressed="${selected}">
       ${icon ? `<i data-lucide="${icon}" class="w-5 h-5 text-text-secondary flex-shrink-0"></i>` : ''}
       <span class="flex-1 text-body text-text">${label}</span>
       ${selected ? '<i data-lucide="check-circle" class="w-5 h-5 text-primary check-bounce flex-shrink-0"></i>' : '<div class="w-5 h-5 flex-shrink-0"></div>'}
@@ -238,7 +254,7 @@ function renderLanding(ctx: WizardContext): void {
   const { container } = ctx;
   container.innerHTML = `
     <!-- Hero Section -->
-    <section class="landing-hero bg-gradient-to-br from-primary-light to-bg py-24 px-4">
+    <section class="landing-hero bg-gradient-to-br from-primary-light to-bg py-12 sm:py-24 px-4">
       <div class="max-w-4xl mx-auto flex flex-col lg:flex-row items-center gap-12">
         <div class="flex-1 text-left">
           <h1 class="text-h1 sm:text-display text-text mb-4 leading-tight">${t('landing.heroQuestion')}</h1>
@@ -246,6 +262,9 @@ function renderLanding(ctx: WizardContext): void {
           <button id="cta-start" class="btn-primary px-10 py-4 rounded-pill bg-primary text-white text-btn font-semibold text-lg">
             ${t('landing.cta')}
           </button>
+          <p class="text-caption text-text-muted mt-4 flex items-center gap-1.5">
+            <i data-lucide="lock" class="w-3.5 h-3.5"></i> ${t('landing.privacy')}
+          </p>
         </div>
         <div class="flex-1 hidden lg:flex justify-center">
           <div class="wizard-panel bg-surface rounded-sharp shadow-wizard p-8 w-full max-w-sm opacity-80">
@@ -268,7 +287,7 @@ function renderLanding(ctx: WizardContext): void {
 
     <!-- Value Props -->
     <section class="py-16 px-4">
-      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         <div class="flex items-start gap-4">
           <div class="p-3 rounded-soft bg-primary-light flex-shrink-0">
             <i data-lucide="badge-check" class="w-6 h-6 text-primary"></i>
@@ -311,8 +330,30 @@ function renderLanding(ctx: WizardContext): void {
       </div>
     </section>
 
-    <!-- Encouragement -->
+    <!-- FAQ -->
     <section class="py-16 px-4">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-h2 text-text mb-8 text-left">${t('landing.faqTitle')}</h2>
+        <div class="space-y-4" id="landing-faq">
+          ${['1','2','3','4','5'].map(n => `
+            <div class="border-[1.5px] border-border rounded-soft overflow-hidden">
+              <button class="landing-faq-trigger w-full text-left p-4 flex items-center justify-between gap-3 hover:bg-[#F9FAFB] transition-colors min-h-[48px]" aria-expanded="false" aria-controls="lfaq-${n}">
+                <span class="text-body-sm font-semibold text-text">${t('landing.faq' + n + 'q')}</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 text-text-muted flex-shrink-0 transition-transform duration-200"></i>
+              </button>
+              <div id="lfaq-${n}" class="accordion-content">
+                <div class="px-4 pb-4 pt-1 border-t border-border">
+                  <p class="text-body text-text-secondary">${t('landing.faq' + n + 'a')}</p>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- Encouragement -->
+    <section class="py-12 px-4">
       <div class="max-w-2xl mx-auto text-center">
         <p class="text-h2 text-text mb-6">${t('landing.taxSeason')}</p>
         <button id="cta-start-2" class="btn-primary px-10 py-4 rounded-pill bg-primary text-white text-btn font-semibold text-lg">
@@ -326,11 +367,36 @@ function renderLanding(ctx: WizardContext): void {
   const start1 = container.querySelector('#cta-start');
   const start2 = container.querySelector('#cta-start-2');
   const handler = () => {
+    const { darkMode } = loadState();
     clearState();
+    if (darkMode) saveState({ darkMode });
     goToSection('status');
   };
   start1?.addEventListener('click', handler);
   start2?.addEventListener('click', handler);
+
+  // FAQ accordion
+  container.querySelectorAll('.landing-faq-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const content = document.getElementById(trigger.getAttribute('aria-controls') || '');
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      const chevron = trigger.querySelector('[data-lucide="chevron-down"]');
+
+      // Close all others
+      container.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
+      container.querySelectorAll('.landing-faq-trigger').forEach(t => {
+        t.setAttribute('aria-expanded', 'false');
+        const ch = t.querySelector('[data-lucide="chevron-down"]');
+        if (ch) (ch as HTMLElement).style.transform = '';
+      });
+
+      if (!expanded && content) {
+        content.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+        if (chevron) (chevron as HTMLElement).style.transform = 'rotate(180deg)';
+      }
+    });
+  });
 }
 
 // === STATE TAX ===
@@ -423,7 +489,7 @@ function renderStateTax(ctx: WizardContext): void {
 function renderSummary(ctx: WizardContext): void {
   const { container, state } = ctx;
   const lang = getLang();
-  const year = 2026;
+  const year = TAX_YEAR + 1;
 
   const items: string[] = [];
 
@@ -519,12 +585,15 @@ function renderSummary(ctx: WizardContext): void {
     goToSection(getPrevSection('summary', loadState()) || 'state');
   });
   container.querySelector('#btn-restart')?.addEventListener('click', () => {
+    if (!confirm(t('summary.confirmRestart'))) return;
+    const { darkMode } = loadState();
     clearState();
+    if (darkMode) saveState({ darkMode });
     goToSection('landing');
   });
   container.querySelector('#btn-share')?.addEventListener('click', () => {
     if (navigator.share) {
-      navigator.share({ title: 'ShuiYi 税易', text: lang === 'zh' ? '免费报税指南' : 'Free tax guide for international students', url: window.location.href });
+      navigator.share({ title: 'ShuiYi 税易', text: lang === 'zh' ? '我刚用税易5分钟搞清楚了报税，你也试试' : 'I just figured out my US taxes in 5 minutes with ShuiYi — you should try it', url: window.location.href });
     } else {
       navigator.clipboard.writeText(window.location.href);
       const btn = container.querySelector('#btn-share');
@@ -536,6 +605,8 @@ function renderSummary(ctx: WizardContext): void {
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
+    const tag = (document.activeElement as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
     const next = document.getElementById('btn-next');
     if (next && !next.hasAttribute('disabled')) next.click();
   }

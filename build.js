@@ -1,8 +1,13 @@
 const esbuild = require('esbuild');
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
 async function build() {
+  // Build Tailwind CSS
+  const minifyFlag = process.env.NODE_ENV === 'production' ? '--minify' : '';
+  execSync(`npx @tailwindcss/cli -i src/styles/main.css -o dist/styles/tailwind.css ${minifyFlag}`, { stdio: 'inherit' });
+
   // Bundle TypeScript
   await esbuild.build({
     entryPoints: ['src/app.ts'],

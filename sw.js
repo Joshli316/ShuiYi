@@ -20,7 +20,7 @@ self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() =>
-        caches.match('/index.html').then((r) => r || new Response('You need internet to use ShuiYi.', { headers: { 'Content-Type': 'text/html' } }))
+        caches.match('/index.html').then((r) => r || new Response('You need internet to use ShuiYi. 使用税易需要网络连接。', { headers: { 'Content-Type': 'text/html; charset=utf-8' } }))
       )
     );
   } else {
