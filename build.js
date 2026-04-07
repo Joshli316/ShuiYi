@@ -7,15 +7,16 @@ async function build() {
   await esbuild.build({
     entryPoints: ['src/app.ts'],
     bundle: true,
-    outfile: 'dist/app.js',
-    format: 'iife',
+    outdir: 'dist',
+    format: 'esm',
+    splitting: true,
     target: 'es2020',
     sourcemap: true,
     minify: process.env.NODE_ENV === 'production',
   });
 
   // Copy static files to dist
-  const staticFiles = ['index.html', 'manifest.json'];
+  const staticFiles = ['index.html', 'manifest.json', 'robots.txt', 'sitemap.xml', '404.html', '_headers', '_redirects'];
   for (const file of staticFiles) {
     if (fs.existsSync(file)) {
       fs.copyFileSync(file, path.join('dist', file));

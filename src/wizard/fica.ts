@@ -1,6 +1,7 @@
 // FICA Exemption Checker
 import { t, getLang } from '../i18n';
 import { FICA_TOTAL_RATE, FICA_EXEMPT_VISA_TYPES, STUDENT_EXEMPT_YEARS, calculateFICA } from '../data/constants';
+import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
 
 type SubStep = 'employed' | 'paystub' | 'result';
@@ -75,7 +76,7 @@ function renderEmployedStep(ctx: WizardContext): void {
   });
 
   container.querySelector('#btn-back')?.addEventListener('click', () => ctx.goToSection('treaty'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderPaystubStep(ctx: WizardContext): void {
@@ -118,7 +119,7 @@ function renderPaystubStep(ctx: WizardContext): void {
   });
 
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'employed'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderResultStep(ctx: WizardContext): void {
@@ -212,5 +213,5 @@ function renderResultStep(ctx: WizardContext): void {
 
   container.querySelector('#btn-next')?.addEventListener('click', () => ctx.goToSection('year5'));
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, state.isEmployed ? 'paystub' : 'employed'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }

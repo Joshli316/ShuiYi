@@ -1,10 +1,12 @@
 // PDF generation using pdf-lib to fill IRS Form 8843 template
-import { PDFDocument } from 'pdf-lib';
+// pdf-lib is dynamically imported to enable code splitting (~600KB lazy-loaded)
 import { TAX_YEAR, IRS_MAILING_ADDRESS } from '../data/constants';
 import { ALL_COUNTRIES } from '../data/treaties';
 import type { WizardState } from './storage';
 
 export async function generateForm8843PDF(state: WizardState): Promise<void> {
+  const { PDFDocument } = await import('pdf-lib');
+
   // Load the blank Form 8843 PDF
   const pdfUrl = '/assets/form8843-blank.pdf';
   const existingPdfBytes = await fetch(pdfUrl).then(res => {

@@ -1,6 +1,7 @@
 // Year-5 Transition Countdown
 import { t, getLang } from '../i18n';
 import { STUDENT_EXEMPT_YEARS, TAX_YEAR } from '../data/constants';
+import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
 
 export function renderYear5(ctx: WizardContext): void {
@@ -135,5 +136,5 @@ export function renderYear5(ctx: WizardContext): void {
     if (s.hasIncome) ctx.goToSection('fica');
     else ctx.goToSection('form8843');
   });
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }

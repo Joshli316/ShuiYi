@@ -2,6 +2,7 @@
 import { t, getLang } from '../i18n';
 import { calculateTax, STANDARD_DEDUCTION_RA } from '../data/constants';
 import { ALL_COUNTRIES, TREATY_DATA, getTreatyInfo, calculateTreatySavings, TERMINATED_TREATIES } from '../data/treaties';
+import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
 
 type SubStep = 'country' | 'income' | 'result';
@@ -74,7 +75,7 @@ function renderCountryStep(ctx: WizardContext): void {
     }
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => ctx.goToSection('form8843'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderIncomeStep(ctx: WizardContext): void {
@@ -94,13 +95,15 @@ function renderIncomeStep(ctx: WizardContext): void {
   container.innerHTML = shell(ctx, 2, 2, content);
 
   container.querySelector('#btn-next')?.addEventListener('click', () => {
-    const income = parseFloat((container.querySelector('#treaty-income') as HTMLInputElement).value);
-    if (isNaN(income) || income < 0) return;
+    const incomeInput = container.querySelector('#treaty-income') as HTMLInputElement;
+    const income = parseFloat(incomeInput.value);
+    if (isNaN(income) || income < 0) { incomeInput.classList.add('input-error', 'shake'); incomeInput.focus(); setTimeout(() => incomeInput.classList.remove('shake'), 300); return; }
+    incomeInput.classList.remove('input-error');
     ctx.updateState({ incomeAmount: income });
     goSub(ctx, 'result');
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'country'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderResultStep(ctx: WizardContext): void {
@@ -233,7 +236,7 @@ function renderResultStep(ctx: WizardContext): void {
 
   container.querySelector('#btn-next')?.addEventListener('click', () => ctx.goToSection('fica'));
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'income'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function animateCountUp(el: HTMLElement, target: number, duration: number): void {

@@ -3,6 +3,8 @@ import { t, getLang } from '../i18n';
 import { TAX_YEAR, IRS_MAILING_ADDRESS } from '../data/constants';
 import { ALL_COUNTRIES } from '../data/treaties';
 import { generateForm8843PDF } from '../utils/pdf';
+import { initIcons } from '../utils/icons';
+import { escAttr } from '../utils/sanitize';
 import type { WizardContext } from '../app';
 
 type SubStep = 'name' | 'citizenship' | 'school' | 'days' | 'compliant' | 'result';
@@ -56,16 +58,16 @@ function renderNameStep(ctx: WizardContext): void {
     <div class="space-y-4">
       <div>
         <label class="text-body-sm text-text-secondary block mb-2">${t('form8843.name')}</label>
-        <input id="f-name" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${state.fullName || ''}" placeholder="John Smith" aria-label="${t('form8843.name')}">
+        <input id="f-name" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${escAttr(state.fullName || '')}" placeholder="John Smith" aria-label="${t('form8843.name')}">
       </div>
       <div>
         <label class="text-body-sm text-text-secondary block mb-2">${t('form8843.address')}</label>
-        <input id="f-address" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${state.usAddress || ''}" placeholder="123 Main St, City, State ZIP" aria-label="${t('form8843.address')}">
+        <input id="f-address" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${escAttr(state.usAddress || '')}" placeholder="123 Main St, City, State ZIP" aria-label="${t('form8843.address')}">
       </div>
       <div>
         <label class="text-body-sm text-text-secondary block mb-2">${t('form8843.ssn')}</label>
         <p class="text-caption text-text-muted mb-1">${t('form8843.ssnHelp')}</p>
-        <input id="f-ssn" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${state.ssn || ''}" placeholder="XXX-XX-XXXX" aria-label="${t('form8843.ssn')}">
+        <input id="f-ssn" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${escAttr(state.ssn || '')}" placeholder="XXX-XX-XXXX" aria-label="${t('form8843.ssn')}">
       </div>
     </div>
     ${ctx.renderNav({ showBack: true })}
@@ -74,15 +76,17 @@ function renderNameStep(ctx: WizardContext): void {
   container.innerHTML = shell(ctx, 1, 5, content);
 
   container.querySelector('#btn-next')?.addEventListener('click', () => {
-    const name = (container.querySelector('#f-name') as HTMLInputElement).value.trim();
+    const nameInput = container.querySelector('#f-name') as HTMLInputElement;
+    const name = nameInput.value.trim();
     const address = (container.querySelector('#f-address') as HTMLInputElement).value.trim();
     const ssn = (container.querySelector('#f-ssn') as HTMLInputElement).value.trim();
-    if (!name) return;
+    if (!name) { nameInput.classList.add('input-error', 'shake'); nameInput.focus(); setTimeout(() => nameInput.classList.remove('shake'), 300); return; }
+    nameInput.classList.remove('input-error');
     ctx.updateState({ fullName: name, usAddress: address, ssn: ssn || undefined });
     goSub(ctx, 'citizenship');
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => ctx.goToSection('status'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderCitizenshipStep(ctx: WizardContext): void {
@@ -112,14 +116,16 @@ function renderCitizenshipStep(ctx: WizardContext): void {
   container.innerHTML = shell(ctx, 2, 5, content);
 
   container.querySelector('#btn-next')?.addEventListener('click', () => {
-    const citizen = (container.querySelector('#f-citizen') as HTMLSelectElement).value;
+    const citizenSelect = container.querySelector('#f-citizen') as HTMLSelectElement;
+    const citizen = citizenSelect.value;
     const taxRes = (container.querySelector('#f-taxres') as HTMLSelectElement).value;
-    if (!citizen) return;
+    if (!citizen) { citizenSelect.classList.add('input-error', 'shake'); citizenSelect.focus(); setTimeout(() => citizenSelect.classList.remove('shake'), 300); return; }
+    citizenSelect.classList.remove('input-error');
     ctx.updateState({ citizenship: citizen, taxResidence: taxRes || citizen });
     goSub(ctx, 'school');
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'name'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderSchoolStep(ctx: WizardContext): void {
@@ -129,11 +135,11 @@ function renderSchoolStep(ctx: WizardContext): void {
     <div class="space-y-4">
       <div>
         <label class="text-body-sm text-text-secondary block mb-2">${t('form8843.school')}</label>
-        <input id="f-school" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${state.schoolName || ''}" placeholder="University of California, Los Angeles" aria-label="${t('form8843.school')}">
+        <input id="f-school" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${escAttr(state.schoolName || '')}" placeholder="University of California, Los Angeles" aria-label="${t('form8843.school')}">
       </div>
       <div>
         <label class="text-body-sm text-text-secondary block mb-2">${t('form8843.schoolAddress')}</label>
-        <input id="f-school-addr" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${state.schoolAddress || ''}" placeholder="405 Hilgard Ave, Los Angeles, CA 90095" aria-label="${t('form8843.schoolAddress')}">
+        <input id="f-school-addr" type="text" class="w-full border-[1.5px] border-border rounded-medium p-3 text-body text-text bg-surface" value="${escAttr(state.schoolAddress || '')}" placeholder="405 Hilgard Ave, Los Angeles, CA 90095" aria-label="${t('form8843.schoolAddress')}">
       </div>
     </div>
     ${ctx.renderNav({ showBack: true })}
@@ -142,14 +148,16 @@ function renderSchoolStep(ctx: WizardContext): void {
   container.innerHTML = shell(ctx, 3, 5, content);
 
   container.querySelector('#btn-next')?.addEventListener('click', () => {
-    const school = (container.querySelector('#f-school') as HTMLInputElement).value.trim();
+    const schoolInput = container.querySelector('#f-school') as HTMLInputElement;
+    const school = schoolInput.value.trim();
     const addr = (container.querySelector('#f-school-addr') as HTMLInputElement).value.trim();
-    if (!school) return;
+    if (!school) { schoolInput.classList.add('input-error', 'shake'); schoolInput.focus(); setTimeout(() => schoolInput.classList.remove('shake'), 300); return; }
+    schoolInput.classList.remove('input-error');
     ctx.updateState({ schoolName: school, schoolAddress: addr });
     goSub(ctx, 'days');
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'citizenship'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderDaysStep(ctx: WizardContext): void {
@@ -181,7 +189,7 @@ function renderDaysStep(ctx: WizardContext): void {
     goSub(ctx, 'compliant');
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'school'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderCompliantStep(ctx: WizardContext): void {
@@ -209,7 +217,7 @@ function renderCompliantStep(ctx: WizardContext): void {
   });
 
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'days'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderResultStep(ctx: WizardContext): void {
@@ -304,5 +312,5 @@ function renderResultStep(ctx: WizardContext): void {
     }
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'compliant'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }

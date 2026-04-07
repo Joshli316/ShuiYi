@@ -12,6 +12,10 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:image" content="https://shuiyi.pages.dev/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <link rel="canonical" href="https://shuiyi.pages.dev/">
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json">
@@ -76,7 +80,7 @@
   </script>
 
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js" integrity="sha384-ieG+IKD0d/ZPXyCBTMVAbqsQdns8QGJR/e26WMw7M4fkaI/rHcS/YIoi+ah9WGge" crossorigin="anonymous"></script>
 
   <!-- Print CSS -->
   <link rel="stylesheet" href="/styles/print.css" media="print">
@@ -216,9 +220,29 @@
     html.dark .disclaimer-banner { background-color: #1A1A1A !important; }
     html.dark .landing-hero { background: linear-gradient(135deg, #0a2618 0%, #111111 100%) !important; }
     html.dark .result-card-bg { background: linear-gradient(135deg, #1a3a2a, #1F1F1F) !important; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .wizard-step-enter, .wizard-step-exit, .wizard-step-enter-back, .wizard-step-exit-back,
+      .result-enter, .check-bounce { animation: none !important; }
+      .progress-fill, .option-card, .btn-primary, .btn-ghost, .accordion-content { transition: none !important; }
+    }
+
+    /* Focus visible for option cards */
+    .option-card:focus-visible { outline: 3px solid #2D9F6F; outline-offset: 2px; }
+
+    /* Validation error shake */
+    .input-error { border-color: #DC2626 !important; box-shadow: 0 0 0 2px rgba(220,38,38,0.2) !important; }
+    .shake { animation: shake 300ms ease; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
+  <a href="#app" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-primary focus:text-white focus:px-4 focus:py-2 focus:rounded-pill focus:z-[999]">Skip to main content</a>
 
   <!-- Header -->
   <header class="w-full border-b border-border bg-surface sticky top-0 z-50">
@@ -229,11 +253,11 @@
       </a>
       <div class="flex items-center gap-3">
         <!-- Dark mode toggle -->
-        <button id="dark-toggle" class="p-2 rounded-pill hover:bg-primary-light text-text-secondary" aria-label="Toggle dark mode">
+        <button id="dark-toggle" class="p-2.5 rounded-pill hover:bg-primary-light text-text-secondary min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Toggle dark mode">
           <i data-lucide="moon" class="w-5 h-5"></i>
         </button>
         <!-- Language toggle -->
-        <button id="lang-toggle" class="flex items-center gap-1 px-3 py-1.5 rounded-pill border border-border text-body-sm text-text-secondary hover:bg-primary-light" aria-label="Switch language">
+        <button id="lang-toggle" class="flex items-center gap-1 px-3 py-2.5 rounded-pill border border-border text-body-sm text-text-secondary hover:bg-primary-light min-h-[44px]" aria-label="Switch language">
           <i data-lucide="globe" class="w-4 h-4"></i>
           <span id="lang-label">中文</span>
         </button>
@@ -265,7 +289,7 @@
   </footer>
 
   <!-- App bundle -->
-  <script src="/app.js" defer></script>
+  <script type="module" src="/app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});

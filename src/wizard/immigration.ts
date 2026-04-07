@@ -1,5 +1,7 @@
 // Immigration Risk Explainer — FAQ accordion format
 import { t, getLang } from '../i18n';
+import { loadState } from '../utils/storage';
+import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
 
 interface FAQ {
@@ -127,6 +129,10 @@ export function renderImmigration(ctx: WizardContext): void {
   });
 
   container.querySelector('#btn-next')?.addEventListener('click', () => ctx.goToSection('state'));
-  container.querySelector('#btn-back')?.addEventListener('click', () => ctx.goToSection('year5'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  container.querySelector('#btn-back')?.addEventListener('click', () => {
+    const s = loadState();
+    // RA users come from status; NRA users come from year5
+    ctx.goToSection(s.taxStatus === 'RA' ? 'status' : 'year5');
+  });
+  initIcons();
 }

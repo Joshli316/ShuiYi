@@ -2,6 +2,7 @@
 import { t, getLang } from '../i18n';
 import { calculateSPT } from '../utils/spt';
 import { TAX_YEAR, STUDENT_EXEMPT_YEARS } from '../data/constants';
+import { initIcons } from '../utils/icons';
 import type { WizardContext } from '../app';
 
 type SubStep = 'visa' | 'entry' | 'confirm' | 'priorj1' | 'income' | 'result';
@@ -103,7 +104,7 @@ function renderVisaStep(ctx: WizardContext): void {
     }
   });
 
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderEntryStep(ctx: WizardContext): void {
@@ -144,16 +145,20 @@ function renderEntryStep(ctx: WizardContext): void {
   if (panel) panel.innerHTML = content;
 
   container.querySelector('#btn-next')?.addEventListener('click', () => {
-    const month = parseInt((container.querySelector('#entry-month') as HTMLSelectElement).value);
-    const year = parseInt((container.querySelector('#entry-year') as HTMLSelectElement).value);
-    if (!month || !year) return;
+    const monthSelect = container.querySelector('#entry-month') as HTMLSelectElement;
+    const yearSelect = container.querySelector('#entry-year') as HTMLSelectElement;
+    const month = parseInt(monthSelect.value);
+    const year = parseInt(yearSelect.value);
+    if (!month) { monthSelect.classList.add('input-error', 'shake'); monthSelect.focus(); setTimeout(() => monthSelect.classList.remove('shake'), 300); return; }
+    if (!year) { yearSelect.classList.add('input-error', 'shake'); yearSelect.focus(); setTimeout(() => yearSelect.classList.remove('shake'), 300); return; }
+    monthSelect.classList.remove('input-error'); yearSelect.classList.remove('input-error');
     const calendarYears = currentYear - year + 1;
     ctx.updateState({ entryMonth: month, entryYear: year, calendarYears });
     goSub(ctx, 'confirm');
   });
 
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'visa'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderConfirmStep(ctx: WizardContext): void {
@@ -192,7 +197,7 @@ function renderConfirmStep(ctx: WizardContext): void {
   });
 
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'entry'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderPriorJ1Step(ctx: WizardContext): void {
@@ -236,7 +241,7 @@ function renderPriorJ1Step(ctx: WizardContext): void {
   });
 
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'confirm'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderIncomeStep(ctx: WizardContext): void {
@@ -282,7 +287,7 @@ function renderIncomeStep(ctx: WizardContext): void {
     if (['F-1', 'M-1', 'Q-1'].includes(visa)) goSub(ctx, 'priorj1');
     else goSub(ctx, 'confirm');
   });
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }
 
 function renderResultStep(ctx: WizardContext): void {
@@ -309,7 +314,33 @@ function renderResultStep(ctx: WizardContext): void {
   ` : '';
 
   const nextStepText = isNRA ? t('status.nraNext') : t('status.raNext');
-  const nextLabel = isNRA ? t('status.continueToForm') : t('common.continue');
+  const nextLabel = isNRA ? t('status.continueToForm') : t('status.continueToImmigration');
+
+  // RA-specific guidance section
+  const raGuidance = !isNRA ? `
+    <div class="mt-6 space-y-3">
+      <div class="flex items-start gap-3">
+        <i data-lucide="file-text" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
+        <p class="text-body text-text">${t('status.raGuidance1')}</p>
+      </div>
+      <div class="flex items-start gap-3">
+        <i data-lucide="receipt" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
+        <p class="text-body text-text">${t('status.raGuidance2')}</p>
+      </div>
+      <div class="flex items-start gap-3">
+        <i data-lucide="globe" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0"></i>
+        <p class="text-body text-text">${t('status.raGuidance3')}</p>
+      </div>
+      <div class="flex items-start gap-3">
+        <i data-lucide="wallet" class="w-5 h-5 text-text-secondary mt-0.5 flex-shrink-0"></i>
+        <p class="text-body text-text">${t('status.raGuidance4')}</p>
+      </div>
+      <div class="flex items-start gap-3">
+        <i data-lucide="monitor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0"></i>
+        <p class="text-body text-text">${t('status.raGuidance5')}</p>
+      </div>
+    </div>
+  ` : '';
 
   container.innerHTML = `
     <div class="max-w-[640px] mx-auto px-4 sm:px-0 py-12">
@@ -331,6 +362,7 @@ function renderResultStep(ctx: WizardContext): void {
           </a>
 
           <p class="text-body text-text mb-4">${nextStepText}</p>
+          ${raGuidance}
         </div>
 
         ${ctx.renderNav({ showBack: true, nextLabel })}
@@ -342,11 +374,11 @@ function renderResultStep(ctx: WizardContext): void {
   container.querySelector('#btn-next')?.addEventListener('click', () => {
     const s = ctx.updateState({});
     if (s.taxStatus === 'RA') {
-      ctx.goToSection('summary');
+      ctx.goToSection('immigration');
     } else {
       ctx.goToSection('form8843');
     }
   });
   container.querySelector('#btn-back')?.addEventListener('click', () => goSub(ctx, 'income'));
-  setTimeout(() => { if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons(); }, 10);
+  initIcons();
 }

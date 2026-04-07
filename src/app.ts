@@ -9,6 +9,7 @@ import { renderYear5 } from './wizard/year5';
 import { renderImmigration } from './wizard/immigration';
 import { STATES } from './data/states';
 import { TREATY_DATA } from './data/treaties';
+import { initIcons } from './utils/icons';
 
 // Wizard context passed to each module
 export interface WizardContext {
@@ -40,7 +41,7 @@ const sections: Record<string, SectionRenderer> = {
 // Section flow for NRA path
 const NRA_FLOW = ['status', 'form8843', 'treaty', 'fica', 'year5', 'immigration', 'state', 'summary'];
 const NRA_NO_INCOME_FLOW = ['status', 'form8843', 'year5', 'immigration', 'state', 'summary'];
-const RA_FLOW = ['status', 'summary'];
+const RA_FLOW = ['status', 'immigration', 'state', 'summary'];
 
 function getFlow(state: WizardState): string[] {
   if (state.taxStatus === 'RA') return RA_FLOW;
@@ -83,10 +84,7 @@ function init(): void {
   const section = state.currentSection || 'landing';
   goToSection(section);
 
-  // Initialize Lucide icons
-  if (typeof (window as any).lucide !== 'undefined') {
-    (window as any).lucide.createIcons();
-  }
+  initIcons();
 }
 
 function setupLogoClick(): void {
@@ -123,9 +121,7 @@ function setupDarkMode(): void {
     const icon = btn.querySelector('[data-lucide]');
     if (icon) {
       icon.setAttribute('data-lucide', isDark ? 'sun' : 'moon');
-      if (typeof (window as any).lucide !== 'undefined') {
-        (window as any).lucide.createIcons();
-      }
+      initIcons();
     }
   });
 }
@@ -162,12 +158,12 @@ function goToSection(sectionId: string): void {
   const renderer = sections[sectionId];
   if (renderer) {
     renderer(ctx);
-    // Re-initialize Lucide icons after rendering
+    initIcons();
+    // Focus first interactive element for keyboard/screen reader users
     setTimeout(() => {
-      if (typeof (window as any).lucide !== 'undefined') {
-        (window as any).lucide.createIcons();
-      }
-    }, 10);
+      const target = container.querySelector('input, select, [role="button"], button:not([id="dark-toggle"]):not([id="lang-toggle"])') as HTMLElement;
+      if (target) target.focus({ preventScroll: true });
+    }, 50);
   }
 }
 
@@ -192,7 +188,7 @@ function renderProgressBar(step: number, total: number, subtitle?: string): stri
       <div class="flex justify-between items-center mb-2">
         <span class="text-caption text-text-secondary">${stepLabel}</span>
       </div>
-      <div class="w-full h-1.5 bg-border rounded-pill overflow-hidden">
+      <div class="w-full h-1.5 bg-border rounded-pill overflow-hidden" role="progressbar" aria-valuenow="${step}" aria-valuemin="1" aria-valuemax="${total}" aria-label="${stepLabel}">
         <div class="progress-fill h-full bg-primary rounded-pill" style="width: ${pct}%"></div>
       </div>
       <p class="text-caption text-text-secondary italic mt-1">${subtitle || encouragement}</p>
@@ -408,7 +404,7 @@ function renderStateTax(ctx: WizardContext): void {
         </div>
       `;
     }
-    if (typeof (window as any).lucide !== 'undefined') (window as any).lucide.createIcons();
+    initIcons();
   }
 
   if (state.stateCode) showResult(state.stateCode);
@@ -437,14 +433,22 @@ function renderSummary(ctx: WizardContext): void {
     : (lang === 'zh' ? '居民外国人 (RA)' : 'Resident Alien (RA)');
   items.push(`<li class="flex items-start gap-3"><i data-lucide="badge-check" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i><span>${t('summary.status').replace('{status}', statusLabel)}</span></li>`);
 
-  // Form 8843
+  // Form 8843 (NRA only)
   if (state.taxStatus === 'NRA') {
     items.push(`<li class="flex items-start gap-3"><i data-lucide="file-text" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i><span>${t('summary.fileForm8843')}</span></li>`);
   }
 
-  // 1040-NR
+  // 1040-NR (NRA with income)
   if (state.taxStatus === 'NRA' && state.hasIncome) {
     items.push(`<li class="flex items-start gap-3"><i data-lucide="file-text" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i><span>${t('summary.file1040NR')}</span></li>`);
+  }
+
+  // RA-specific items
+  if (state.taxStatus === 'RA') {
+    items.push(`<li class="flex items-start gap-3"><i data-lucide="file-text" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i><span>${t('summary.file1040')}</span></li>`);
+    items.push(`<li class="flex items-start gap-3"><i data-lucide="receipt" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i><span>${t('summary.standardDeduction')}</span></li>`);
+    items.push(`<li class="flex items-start gap-3"><i data-lucide="globe" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0"></i><span>${t('summary.worldwideIncome')}</span></li>`);
+    items.push(`<li class="flex items-start gap-3"><i data-lucide="monitor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0"></i><span>${t('summary.raSoftware')}</span></li>`);
   }
 
   // Treaty
@@ -468,10 +472,12 @@ function renderSummary(ctx: WizardContext): void {
   }
 
   // Deadlines
-  if (state.hasIncome) {
+  if (state.hasIncome || state.taxStatus === 'RA') {
     items.push(`<li class="flex items-start gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0"></i><span class="font-semibold">${t('summary.deadlineApril').replace('{year}', String(year))}</span></li>`);
   }
-  items.push(`<li class="flex items-start gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-text-secondary mt-0.5 flex-shrink-0"></i><span>${t('summary.deadlineJune').replace('{year}', String(year))}</span></li>`);
+  if (state.taxStatus === 'NRA') {
+    items.push(`<li class="flex items-start gap-3"><i data-lucide="calendar-clock" class="w-5 h-5 text-text-secondary mt-0.5 flex-shrink-0"></i><span>${t('summary.deadlineJune').replace('{year}', String(year))}</span></li>`);
+  }
 
   // CPA
   items.push(`<li class="flex items-start gap-3"><i data-lucide="user-check" class="w-5 h-5 text-text-secondary mt-0.5 flex-shrink-0"></i><span>${t('summary.consultCPA')}</span></li>`);
