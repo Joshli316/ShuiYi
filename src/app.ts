@@ -114,8 +114,15 @@ function updateLangToggle(): void {
 function setupDarkMode(): void {
   const btn = document.getElementById('dark-toggle');
   const state = loadState();
-  if (state.darkMode) {
-    document.documentElement.classList.add('dark');
+  const isDarkInit = !!state.darkMode;
+  if (isDarkInit) document.documentElement.classList.add('dark');
+  if (btn) {
+    btn.setAttribute('aria-label', isDarkInit ? t('dark.switchLight') : t('dark.switchDark'));
+    btn.setAttribute('aria-pressed', String(isDarkInit));
+    if (isDarkInit) {
+      const icon = btn.querySelector('[data-lucide]');
+      if (icon) icon.setAttribute('data-lucide', 'sun');
+    }
   }
   btn?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
@@ -353,7 +360,7 @@ function renderLanding(ctx: WizardContext): void {
     </section>
 
     <!-- Encouragement -->
-    <section class="py-12 px-4" style="background-color: var(--dm-primary-light);">
+    <section class="py-12 px-4 bg-dm-primary-light">
       <div class="max-w-2xl mx-auto text-center">
         <p class="text-h2 text-text mb-6">${t('landing.taxSeason')}</p>
         <button id="cta-start-2" class="btn-primary px-10 py-4 rounded-pill bg-primary text-white text-btn font-semibold text-lg">

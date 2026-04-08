@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="scroll-behavior: smooth;">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -138,10 +138,6 @@
       background-color: #1E7A52;
       box-shadow: 0 2px 8px rgba(45,159,111,0.3);
     }
-    .btn-primary:focus-visible {
-      outline: 3px solid #2D9F6F;
-      outline-offset: 2px;
-    }
     .btn-ghost {
       transition: all 150ms ease;
       min-width: 160px;
@@ -150,7 +146,9 @@
     .btn-ghost:hover {
       background-color: #E8F5EE;
     }
-    .btn-ghost:focus-visible {
+    .btn-primary:focus-visible,
+    .btn-ghost:focus-visible,
+    .option-card:focus-visible {
       outline: 3px solid #2D9F6F;
       outline-offset: 2px;
     }
@@ -234,16 +232,18 @@
     .disclaimer-banner { background-color: var(--dm-disclaimer-bg); }
     .landing-hero { background: var(--dm-hero-gradient); }
     .result-card-bg { background: var(--dm-result-gradient); }
+    .bg-dm-primary-light { background-color: var(--dm-primary-light); }
+
+    /* Smooth scrolling */
+    html { scroll-behavior: smooth; }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
       .wizard-step-enter, .wizard-step-exit, .wizard-step-enter-back, .wizard-step-exit-back,
       .result-enter, .check-bounce { animation: none !important; }
       .progress-fill, .option-card, .btn-primary, .btn-ghost, .accordion-content { transition: none !important; }
     }
-
-    /* Focus visible for option cards */
-    .option-card:focus-visible { outline: 3px solid #2D9F6F; outline-offset: 2px; }
 
     /* Validation error shake */
     .input-error { border-color: #DC2626 !important; box-shadow: 0 0 0 2px rgba(220,38,38,0.2) !important; }
