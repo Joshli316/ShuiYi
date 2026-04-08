@@ -1,5 +1,5 @@
 // Service Worker for ShuiYi 税易
-const CACHE_NAME = 'shuiyi-v3';
+const CACHE_NAME = 'shuiyi-v4';
 const ASSETS = [
   '/',
   '/index.html',
