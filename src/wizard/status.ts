@@ -81,7 +81,7 @@ function renderVisaStep(ctx: WizardContext): void {
     <div class="space-y-3">
       ${visas.map(v => ctx.renderOptionCard(v.id, v.label, selected === v.id, v.icon)).join('')}
     </div>
-    ${ctx.renderNav({ showBack: false, nextLabel: t('common.next') })}
+    ${ctx.renderNav({ showBack: true, nextLabel: t('common.next') })}
   `;
 
   container.innerHTML = wizardShell(ctx, 1, 5);
@@ -100,6 +100,7 @@ function renderVisaStep(ctx: WizardContext): void {
     });
   });
 
+  container.querySelector('#btn-back')?.addEventListener('click', () => ctx.goToSection('landing'));
   container.querySelector('#btn-next')?.addEventListener('click', () => {
     const s = ctx.updateState({});
     if (!s.visaType) return;

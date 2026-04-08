@@ -120,7 +120,7 @@ function setupDarkMode(): void {
   btn?.addEventListener('click', () => {
     const isDark = document.documentElement.classList.toggle('dark');
     saveState({ darkMode: isDark });
-    btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    btn.setAttribute('aria-label', isDark ? t('dark.switchLight') : t('dark.switchDark'));
     btn.setAttribute('aria-pressed', String(isDark));
     // Update icon
     const icon = btn.querySelector('[data-lucide]');
@@ -257,7 +257,7 @@ function renderLanding(ctx: WizardContext): void {
     <section class="landing-hero bg-gradient-to-br from-primary-light to-bg py-12 sm:py-24 px-4">
       <div class="max-w-4xl mx-auto flex flex-col lg:flex-row items-center gap-12">
         <div class="flex-1 text-left">
-          <h1 class="text-h1 sm:text-display text-text mb-4 leading-tight">${t('landing.heroQuestion')}</h1>
+          <h1 class="text-h1 sm:text-display text-text mb-4 leading-tight max-w-xl">${t('landing.heroQuestion')}</h1>
           <p class="text-body text-text-secondary mb-8 max-w-lg">${t('landing.heroSubtext')}</p>
           <button id="cta-start" class="btn-primary px-10 py-4 rounded-pill bg-primary text-white text-btn font-semibold text-lg">
             ${t('landing.cta')}
@@ -267,7 +267,7 @@ function renderLanding(ctx: WizardContext): void {
           </p>
         </div>
         <div class="flex-1 hidden lg:flex justify-center">
-          <div class="wizard-panel bg-surface rounded-sharp shadow-wizard p-8 w-full max-w-sm opacity-80">
+          <div class="wizard-panel bg-surface rounded-sharp shadow-wizard p-8 w-full max-w-sm">
             <div class="flex items-center gap-2 mb-4">
               <i data-lucide="badge-check" class="w-5 h-5 text-primary"></i>
               <span class="text-h3 text-text">${t('nav.status')}</span>
@@ -337,11 +337,11 @@ function renderLanding(ctx: WizardContext): void {
         <div class="space-y-4" id="landing-faq">
           ${['1','2','3','4','5'].map(n => `
             <div class="border-[1.5px] border-border rounded-soft overflow-hidden">
-              <button class="landing-faq-trigger w-full text-left p-4 flex items-center justify-between gap-3 hover:bg-[#F9FAFB] transition-colors min-h-[48px]" aria-expanded="false" aria-controls="lfaq-${n}">
+              <button id="lfaq-trigger-${n}" class="landing-faq-trigger w-full text-left p-4 flex items-center justify-between gap-3 hover:bg-[#F9FAFB] transition-colors min-h-[48px]" aria-expanded="false" aria-controls="lfaq-${n}">
                 <span class="text-body-sm font-semibold text-text">${t('landing.faq' + n + 'q')}</span>
                 <i data-lucide="chevron-down" class="w-4 h-4 text-text-muted flex-shrink-0 transition-transform duration-200"></i>
               </button>
-              <div id="lfaq-${n}" class="accordion-content">
+              <div id="lfaq-${n}" class="accordion-content" role="region" aria-labelledby="lfaq-trigger-${n}">
                 <div class="px-4 pb-4 pt-1 border-t border-border">
                   <p class="text-body text-text-secondary">${t('landing.faq' + n + 'a')}</p>
                 </div>
@@ -353,7 +353,7 @@ function renderLanding(ctx: WizardContext): void {
     </section>
 
     <!-- Encouragement -->
-    <section class="py-12 px-4">
+    <section class="py-12 px-4" style="background-color: var(--dm-primary-light);">
       <div class="max-w-2xl mx-auto text-center">
         <p class="text-h2 text-text mb-6">${t('landing.taxSeason')}</p>
         <button id="cta-start-2" class="btn-primary px-10 py-4 rounded-pill bg-primary text-white text-btn font-semibold text-lg">

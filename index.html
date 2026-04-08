@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: smooth;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -132,17 +132,27 @@
     .btn-primary {
       transition: all 150ms ease;
       min-width: 160px;
+      cursor: pointer;
     }
     .btn-primary:hover {
       background-color: #1E7A52;
       box-shadow: 0 2px 8px rgba(45,159,111,0.3);
     }
+    .btn-primary:focus-visible {
+      outline: 3px solid #2D9F6F;
+      outline-offset: 2px;
+    }
     .btn-ghost {
       transition: all 150ms ease;
       min-width: 160px;
+      cursor: pointer;
     }
     .btn-ghost:hover {
       background-color: #E8F5EE;
+    }
+    .btn-ghost:focus-visible {
+      outline: 3px solid #2D9F6F;
+      outline-offset: 2px;
     }
 
     /* Progress bar */
@@ -164,7 +174,7 @@
     }
 
     /* Focus styles */
-    input:focus, select:focus, textarea:focus {
+    input:focus-visible, select:focus-visible, textarea:focus-visible {
       outline: none;
       border-color: #2D9F6F;
       box-shadow: 0 0 0 2px #2D9F6F33;
@@ -183,25 +193,47 @@
     /* Count-up animation placeholder */
     .count-up { font-variant-numeric: tabular-nums; }
 
-    /* Dark mode */
-    @media (prefers-color-scheme: dark) {
-      html.dark body { background-color: #111111; color: #E5E7EB; }
-      html.dark .bg-surface, html.dark .bg-white { background-color: #1A1A1A; }
+    /* Dark mode — CSS custom properties, no !important needed */
+    :root {
+      --dm-bg: #FAFAF8;
+      --dm-surface: #FFFFFF;
+      --dm-panel: #FFFFFF;
+      --dm-text: #1A1A1A;
+      --dm-text-secondary: #4B5563;
+      --dm-border: #E5E7EB;
+      --dm-input-bg: #FFFFFF;
+      --dm-card-selected-bg: #E8F5EE;
+      --dm-disclaimer-bg: #F9FAFB;
+      --dm-primary-light: #E8F5EE;
+      --dm-hero-gradient: linear-gradient(135deg, #E8F5EE 0%, #FAFAF8 100%);
+      --dm-result-gradient: linear-gradient(135deg, #E8F5EE, #FFFFFF);
     }
-    html.dark body { background-color: #111111; color: #E5E7EB; }
-    html.dark .bg-surface { background-color: #1A1A1A !important; }
-    html.dark .wizard-panel { background-color: #1F1F1F !important; border-color: #333 !important; }
-    html.dark .option-card { background-color: #1F1F1F !important; border-color: #333 !important; }
-    html.dark .option-card.selected { background-color: #1a3a2a !important; border-color: #2D9F6F !important; }
-    html.dark .option-card:hover { border-color: #2D9F6F !important; }
-    html.dark input, html.dark select, html.dark textarea {
-      background-color: #1F1F1F !important; color: #E5E7EB !important; border-color: #333 !important;
+    html.dark {
+      --dm-bg: #111111;
+      --dm-surface: #1A1A1A;
+      --dm-panel: #1F1F1F;
+      --dm-text: #E5E7EB;
+      --dm-text-secondary: #9CA3AF;
+      --dm-border: #333333;
+      --dm-input-bg: #1F1F1F;
+      --dm-card-selected-bg: #1a3a2a;
+      --dm-disclaimer-bg: #1A1A1A;
+      --dm-primary-light: #1a3a2a;
+      --dm-hero-gradient: linear-gradient(135deg, #0a2618 0%, #111111 100%);
+      --dm-result-gradient: linear-gradient(135deg, #1a3a2a, #1F1F1F);
     }
-    html.dark .text-text { color: #E5E7EB !important; }
-    html.dark .text-text-secondary { color: #9CA3AF !important; }
-    html.dark .disclaimer-banner { background-color: #1A1A1A !important; }
-    html.dark .landing-hero { background: linear-gradient(135deg, #0a2618 0%, #111111 100%) !important; }
-    html.dark .result-card-bg { background: linear-gradient(135deg, #1a3a2a, #1F1F1F) !important; }
+    html.dark body { background-color: var(--dm-bg); color: var(--dm-text); }
+    .bg-surface { background-color: var(--dm-surface); }
+    .wizard-panel { background-color: var(--dm-panel); border-color: var(--dm-border); }
+    .option-card { background-color: var(--dm-panel); border-color: var(--dm-border); }
+    .option-card.selected { background-color: var(--dm-card-selected-bg); border-color: #2D9F6F; }
+    .option-card:hover { border-color: #2D9F6F; }
+    input, select, textarea { background-color: var(--dm-input-bg); color: var(--dm-text); border-color: var(--dm-border); }
+    .text-text { color: var(--dm-text); }
+    .text-text-secondary { color: var(--dm-text-secondary); }
+    .disclaimer-banner { background-color: var(--dm-disclaimer-bg); }
+    .landing-hero { background: var(--dm-hero-gradient); }
+    .result-card-bg { background: var(--dm-result-gradient); }
 
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {

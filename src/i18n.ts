@@ -62,6 +62,10 @@ const strings: Record<string, StringPair> = {
   // Language toggle
   'lang.toggle': { en: '中文', zh: 'EN' },
 
+  // Dark mode toggle
+  'dark.switchLight': { en: 'Switch to light mode', zh: '切换到浅色模式' },
+  'dark.switchDark': { en: 'Switch to dark mode', zh: '切换到深色模式' },
+
   // Disclaimer
   'disclaimer.text': { en: 'For informational purposes only. This is not tax advice. Consult a qualified tax professional for your specific situation.', zh: '仅供参考，不构成税务建议。请咨询专业税务人员了解你的具体情况。' },
   'disclaimer.reviewFields': { en: 'Review all fields before signing and mailing.', zh: '签名和邮寄前请核实所有信息。' },
